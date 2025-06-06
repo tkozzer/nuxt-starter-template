@@ -1,10 +1,11 @@
 ---
 description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 ---
 description: General rules for Nuxt UI Template - pnpm usage, tech stack, and development conventions
+globs: ["**/*.ts", "**/*.vue", "**/package.json", "**/pnpm-lock.yaml"]
 alwaysApply: true
 ---
 
@@ -80,9 +81,10 @@ pnpm run postinstall  # Prepare Nuxt (auto-run after install)
 
 ## File Structure
 
-- Place pages in `app/pages/`
-- Place components in `app/components/`
-- Place styles in `app/assets/css/`
+- Place pages in `pages/`
+- Place components in `components/`
+    - `components/ui` is reserved for shadcn components only. **NO CUSTOM COMPONENTS**
+- Place styles in `assets/css/`
 - Place server routes in `server/api/`
 - Place static assets in `public/`
 
@@ -113,3 +115,27 @@ When suggesting or adding new dependencies:
 3. Run `pnpm run lint` before committing
 4. Use `pnpm run build` to test production builds
 5. Use `pnpm dlx` for one-time command executions
+
+### Development Server Guidelines
+
+**IMPORTANT**: Always check if the development server is already running before starting a new one:
+
+1. **Check for existing processes** before running `pnpm dev`:
+   - Look for active terminal sessions or background processes
+   - Check if port 3000 (or configured port) is already in use
+   - Use `ps aux | grep "nuxt dev"` or similar commands to check for running processes
+
+2. **Only start development server when explicitly requested**:
+   - ❌ **DO NOT** automatically run `pnpm dev` after making changes
+   - ❌ **DO NOT** start the dev server "to test" unless asked
+   - ✅ **ONLY** run `pnpm dev` when the user explicitly asks you to start the development server
+   - ✅ **ASK** the user if they want you to start the dev server rather than assuming
+
+3. **If development server is already running**:
+   - Inform the user that the server is already active
+   - Suggest they refresh their browser or check the existing server
+   - Only restart if there are specific issues or if explicitly requested
+
+4. **Background process handling**:
+   - Use `is_background: true` for long-running dev server processes
+   - Inform the user how to stop the server (Ctrl+C) when appropriate

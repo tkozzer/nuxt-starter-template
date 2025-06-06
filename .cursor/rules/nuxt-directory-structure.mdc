@@ -1,0 +1,306 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Nuxt 3 directory structure and organization conventions based on official documentation
+globs: ["**/*.vue", "**/nuxt.config.ts", "**/app.config.ts"]
+alwaysApply: true
+---
+
+# Nuxt 3 Directory Structure and Organization
+
+This rule defines the proper directory structure and organization conventions for Nuxt 3 applications based on official documentation.
+
+## Core Directory Structure
+
+### Root Level Files
+- `app.vue` - Main component, optional if using pages/
+- `nuxt.config.ts` - Nuxt configuration file
+- `app.config.ts` - App-level reactive configuration
+- `error.vue` - Global error page
+- `package.json` - Project dependencies and scripts
+
+#### `pages/` Directory 
+- **File-based routing** - Each `.vue` file automatically becomes a route
+- `pages/index.vue` → `/` (root path)
+- `pages/about.vue` → `/about`
+- `pages/blog/index.vue` → `/blog`
+- `pages/blog/[slug].vue` → `/blog/:slug` (dynamic route)
+- **Nested routes**: Use subdirectories for nested routing
+- **Dynamic routes**: Use square brackets `[id].vue` for dynamic segments
+
+#### `components/` Directory
+- **Auto-imported** - No need to manually import components
+- **ALWAYS use subdirectories** - Never place components directly in `components/` root
+- **Nested naming**: `components/base/Button.vue` → `<BaseButton />`
+- **Global components**: Place in `components/global/` or use `.global.vue` suffix
+- **Lazy loading**: Use `Lazy` prefix for dynamic imports (`<LazyMyComponent />`)
+- **Client components**: Use `.client.vue` suffix for client-only components
+- **Server components**: Use `.server.vue` suffix for server-only components
+
+##### `components/ui/` Directory - SHADCN ONLY
+- **Reserved for shadcn-vue components** - NO CUSTOM COMPONENTS ALLOWED
+- Contains only components installed via `pnpm dlx shadcn-vue@latest add [component]`
+- Examples: `Button.vue`, `Card.vue`, `Dialog.vue`, etc.
+- **DO NOT** place custom components here, even if they extend shadcn components
+
+##### Custom Component Organization
+- **Feature-based**: `components/auth/`, `components/dashboard/`, `components/profile/`
+- **Type-based**: `components/forms/`, `components/layout/`, `components/common/`
+- **App-specific**: `components/app/` for app-wide components like headers, footers
+- **Global**: `components/global/` for truly global components used everywhere
+
+#### `layouts/` Directory
+- Define reusable page structures
+- `layouts/default.vue` - Default layout if none specified
+- **Usage**: Set `layout: 'custom'` in `definePageMeta()` or use `<NuxtLayout name="custom">`
+- **Nested layouts**: `layouts/admin/dashboard.vue` → `admin-dashboard`
+- **Single root element** required (cannot be `<slot />`)
+
+#### `composables/` Directory
+- **Auto-imported** Vue composables using Composition API
+- **Top-level only** auto-imported by default
+- **Naming**: Use `use` prefix (e.g., `useAuth.ts`)
+- **Nested composables**: Configure in `nuxt.config.ts` to auto-import subdirectories
+
+#### `middleware/` Directory
+- Route middleware functions
+- **Named middleware**: `middleware/auth.ts` → use with `middleware: 'auth'`
+- **Global middleware**: Use `.global.ts` suffix to run on every route
+- **Anonymous middleware**: Define directly in pages with `definePageMeta()`
+
+#### `plugins/` Directory
+- **Auto-registered** app-level functionality
+- **Top-level** files and `index.ts` in subdirectories are registered
+- **Client/Server specific**: Use `.client.ts` or `.server.ts` suffixes
+
+#### `server/` Directory
+- Server-side code and API routes
+- `server/api/` - API endpoints (auto-registered)
+- `server/middleware/` - Server middleware
+- `server/plugins/` - Server plugins
+
+#### `assets/` Directory
+- Files processed by build tools (Vite)
+- CSS, SCSS, images, fonts
+- **Import in components**: `@/assets/css/main.css`
+
+#### `public/` Directory
+- Static files served directly at server root
+- Files that keep their names (robots.txt, favicon.ico)
+- **No processing** by build tools
+
+#### `utils/` Directory
+- **Auto-imported** utility functions
+- Helper functions available throughout the application
+
+#### `content/` Directory (Optional)
+- For Nuxt Content module
+- Markdown, JSON, YAML, CSV files
+- File-based CMS functionality
+
+## File Naming Conventions
+
+### Components
+- **PascalCase**: `MyComponent.vue`
+- **Descriptive names**: `UserProfileCard.vue` not `Card.vue`
+- **Nested structure**: `components/ui/Button.vue` → `<UiButton />`
+
+### Pages
+- **kebab-case**: `about-us.vue`, `user-profile.vue`
+- **Dynamic routes**: `[id].vue`, `[...slug].vue`
+- **Index files**: `index.vue` for directory root
+
+### Composables
+- **camelCase with `use` prefix**: `useAuth.ts`, `useLocalStorage.ts`
+
+### Middleware
+- **kebab-case**: `auth.ts`, `admin-only.ts`
+- **Global suffix**: `auth.global.ts`
+
+### Layouts
+- **kebab-case**: `default.vue`, `admin-panel.vue`
+
+## Auto-Import Behavior
+
+### Automatically Imported
+- Components from `components/`
+- Composables from `composables/`
+- Utils from `utils/`
+- Vue composables (ref, reactive, computed, etc.)
+- Nuxt composables (navigateTo, useFetch, etc.)
+
+### Manual Import Required
+- Files in subdirectories (unless configured)
+- Third-party library components
+- Direct imports from `#components` when needed
+
+## Best Practices
+
+### Directory Organization
+```
+project/
+├── nuxt.config.ts
+├── pages/
+│   ├── index.vue
+│   ├── about.vue
+│   └── users/
+│       ├── index.vue
+│       └── [id].vue
+├── components/
+│   ├── ui/                    # SHADCN COMPONENTS ONLY
+│   │   ├── button/
+│   │   │   └── Button.vue     # from pnpm dlx shadcn-vue add button
+│   │   └── card/
+│   │       └── Card.vue       # from pnpm dlx shadcn-vue add card
+│   ├── app/                   # App-wide components
+│   │   ├── Header.vue
+│   │   └── Footer.vue
+│   ├── common/                # Reusable custom components
+│   │   ├── ShadowCard.vue
+│   │   └── LoadingSpinner.vue
+│   ├── forms/                 # Form-related components
+│   │   ├── ContactForm.vue
+│   │   └── LoginForm.vue
+│   └── global/                # Global components
+│       └── ErrorBoundary.vue
+├── layouts/
+│   ├── default.vue
+│   └── admin.vue
+├── composables/
+│   ├── useAuth.ts
+│   └── useApi.ts
+├── middleware/
+│   ├── auth.ts
+│   └── admin.global.ts
+├── plugins/
+│   └── api.client.ts
+├── server/
+│   └── api/
+│       └── users.get.ts
+├── assets/
+│   └── css/
+│       └── main.css
+└── public/
+    ├── favicon.ico
+    └── robots.txt
+```
+
+### Component Organization
+- **NEVER place components directly in `components/` root** - Always use subdirectories
+- **`components/ui/` is RESERVED** - Only for shadcn-vue components installed via CLI
+- **Group by feature**: `components/auth/`, `components/dashboard/`, `components/profile/`
+- **Group by type**: `components/forms/`, `components/layout/`, `components/common/`
+- **Use descriptive subdirectory names** for better organization
+- **Keep components small** and focused on a single responsibility
+
+#### Recommended Component Directory Structure:
+```
+components/
+├── ui/                 # SHADCN ONLY - installed via CLI
+├── app/                # App-wide components (headers, footers, nav)
+├── common/             # Reusable custom components
+├── forms/              # Form-related components
+├── layout/             # Layout-specific components
+├── auth/               # Authentication-related components
+├── dashboard/          # Dashboard-specific components
+└── global/             # Truly global components
+```
+
+### Performance Considerations
+- Use **lazy loading** for heavy components (`Lazy` prefix)
+- Use **server components** for non-interactive content
+- Use **client components** only when necessary
+- **Avoid global components** unless truly needed everywhere
+
+### App.vue Structure
+```vue
+<!-- With pages directory -->
+<template>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
+</template>
+
+### Layout Structure
+```vue
+<!-- layouts/default.vue -->
+<template>
+  <div>
+    <header>
+      <AppHeader />
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <AppFooter />
+    </footer>
+  </div>
+</template>
+```
+
+## Migration Notes from Nuxt 2
+
+- `static/` → `public/`
+- `store/` → Use Pinia or custom stores
+- `middleware/` behavior slightly changed
+- Auto-imports are enabled by default
+- File-based routing works the same way
+
+## Configuration Options
+
+### Custom Component Directories
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false, // Use component name only
+    },
+    {
+      path: '~/components/special',
+      prefix: 'Special' // Prefix all components
+    }
+  ]
+})
+```
+
+### Custom Composables Directories  
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  imports: {
+    dirs: [
+      'composables',
+      'composables/**', // Include subdirectories
+      'utils/**'
+    ]
+  }
+})
+```
+
+## Do's and Don'ts
+
+### Do's
+- ✅ Use the conventional directory structure
+- ✅ Leverage auto-imports for cleaner code
+- ✅ **Always organize components in subdirectories**
+- ✅ **Keep `components/ui/` for shadcn components only**
+- ✅ Group components by feature or type in appropriate subdirectories
+- ✅ Use descriptive file names and directory names
+- ✅ Follow Vue 3 Composition API patterns
+- ✅ Use TypeScript for better DX
+
+### Don'ts
+- ❌ **NEVER place components directly in `components/` root directory**
+- ❌ **NEVER put custom components in `components/ui/`** (shadcn reserved)
+- ❌ Don't modify files in `.nuxt/` or `.output/`
+- ❌ Don't manually import auto-imported items
+- ❌ Don't create deeply nested directory structures (max 2-3 levels)
+- ❌ Don't use default exports for composables
+- ❌ Don't mix Nuxt 2 and Nuxt 3 patterns
+- ❌ Don't ignore the conventional naming patterns

@@ -1,0 +1,214 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Shadcn-Vue Component Library Integration Rules for Nuxt - complete component list and installation instructions
+globs: ["**/components/ui/**/*.vue", "**/components.json", "**/tailwind.config.*"]
+alwaysApply: true
+---
+
+# Shadcn-Vue Component Library Rules
+
+**ALWAYS APPLY THESE RULES** - These rules should be followed when working with shadcn-vue components in this Nuxt project.
+
+## Project Setup Status
+
+This project already has:
+✅ shadcn-nuxt module installed (`shadcn-nuxt: ^2.2.0`)
+✅ Tailwind CSS v4 configured
+✅ Basic dependencies in place
+
+## Before Adding Any Component
+
+**ALWAYS CHECK** if the component already exists in the project before adding it:
+
+1. Check if the component exists in `components/ui/` directory
+2. Check if it's already imported in any existing files
+3. Use file search to verify: `find . -name "*component-name*" -type f`
+
+## Installation Commands
+
+### Initialize Shadcn-Vue (if not already done)
+```bash
+pnpm dlx shadcn-vue@latest init
+```
+**Note: only needed during install** 
+
+### Add Individual Components
+```bash
+# Add a single component
+pnpm dlx shadcn-vue@latest add [component-name]
+
+# Add multiple components at once
+pnpm dlx shadcn-vue@latest add button card dialog
+
+# Add all available components (use with caution)
+pnpm dlx shadcn-vue@latest add --all
+```
+
+### View Available Components
+```bash
+# See list of all available components
+pnpm dlx shadcn-vue@latest add
+```
+
+## Complete List of Available Shadcn-Vue Components (60+ Components)
+
+### Layout & Navigation
+- **sidebar** - Collapsible sidebar with navigation
+- **breadcrumb** - Navigation breadcrumbs
+- **menubar** - Horizontal menu bar
+- **navigation-menu** - Complex navigation component
+- **pagination** - Page navigation controls
+
+### Form Controls
+- **button** - Primary button component
+- **input** - Text input field
+- **textarea** - Multi-line text input
+- **checkbox** - Checkbox input
+- **radio-group** - Radio button group
+- **select** - Dropdown select
+- **switch** - Toggle switch
+- **slider** - Range slider
+- **label** - Form labels
+- **form** - Form wrapper with validation
+- **number-field** - Numeric input with stepper
+- **pin-input** - PIN/OTP input field
+- **tags-input** - Tag input component
+
+### Data Display
+- **table** - Data table
+- **card** - Content cards
+- **avatar** - User avatar display
+- **badge** - Small status indicators
+- **separator** - Visual dividers
+- **skeleton** - Loading placeholders
+- **progress** - Progress indicators
+- **aspect-ratio** - Aspect ratio container
+
+### Feedback
+- **alert** - Alert messages
+- **toast** - Toast notifications
+- **sonner** - Advanced toast system
+- **hover-card** - Hover tooltips
+- **tooltip** - Simple tooltips
+
+### Overlays
+- **dialog** - Modal dialogs
+- **alert-dialog** - Confirmation dialogs
+- **sheet** - Side panels
+- **drawer** - Mobile-friendly drawers
+- **popover** - Floating content
+- **context-menu** - Right-click menus
+- **dropdown-menu** - Dropdown menus
+
+### Interactive
+- **tabs** - Tab navigation
+- **accordion** - Collapsible content
+- **collapsible** - Show/hide content
+- **toggle** - Toggle button
+- **toggle-group** - Toggle button group
+- **carousel** - Image/content carousel
+- **resizable** - Resizable panels
+
+### Specialized Inputs
+- **calendar** - Date picker calendar
+- **date-picker** - Date input field
+- **range-calendar** - Date range picker
+- **combobox** - Searchable select
+- **command** - Command palette
+
+### Data Visualization
+- **auto-form** - Form generation from Zod schemas
+- **data-table** - Advanced data table
+- **scroll-area** - Custom scrollbars
+
+### Charts (Extended Components)
+- **area-chart** - Area chart visualization
+- **bar-chart** - Bar chart visualization
+- **line-chart** - Line chart visualization
+- **donut-chart** - Donut chart visualization
+
+## Usage in Nuxt
+
+Thanks to Nuxt's auto-import feature and the shadcn-nuxt module, components are automatically available:
+
+```vue
+<template>
+  <div>
+    <!-- No import needed, components are auto-imported -->
+    <Button variant="default">Click me</Button>
+    <Card>
+      <CardHeader>
+        <CardTitle>Card Title</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Card content goes here</p>
+      </CardContent>
+    </Card>
+  </div>
+</template>
+```
+
+## Component Variants
+
+Most components support variants for styling:
+
+```vue
+<!-- Button variants -->
+<Button variant="default">Default</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>
+
+<!-- Size variants -->
+<Button size="default">Default</Button>
+<Button size="sm">Small</Button>
+<Button size="lg">Large</Button>
+<Button size="icon">Icon</Button>
+```
+
+## Important Notes
+
+1. **Components are copied, not installed** - Shadcn-vue copies component code into your project, giving you full control
+2. **Reka UI vs Radix Vue** - Latest version uses Reka UI. For Radix Vue, use `pnpm dlx shadcn-vue@radix`
+3. **Tailwind CSS Integration** - Components are styled with Tailwind CSS classes
+4. **TypeScript Support** - All components have full TypeScript support
+5. **Accessibility** - Components follow accessibility best practices
+6. **Customizable** - Since code is copied, you can modify components as needed
+
+## Project-Specific Guidelines
+
+- Components are installed to `components/ui/` directory
+- Use TypeScript for all component implementations
+- Follow the project's existing ESLint configuration
+- Test components in isolation before integrating
+- Document any custom modifications to standard components
+
+## CLI Options Reference
+
+```bash
+# Initialize with defaults
+pnpm dlx shadcn-vue@latest init --defaults
+
+# Add component with overwrite
+pnpm dlx shadcn-vue@latest add button --overwrite
+
+# Skip confirmation prompts
+pnpm dlx shadcn-vue@latest add card --yes
+
+# Specify custom path
+pnpm dlx shadcn-vue@latest add dialog --path ./custom/path
+```
+
+## Links and Documentation
+
+- [Official Documentation](https://www.shadcn-vue.com/)
+- [Component Gallery](https://www.shadcn-vue.com/docs/components)
+- [CLI Documentation](https://www.shadcn-vue.com/docs/cli)
+- [GitHub Repository](https://github.com/unovue/shadcn-vue)
+- [Reka UI Documentation](https://reka-ui.com/)

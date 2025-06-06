@@ -1,0 +1,2 @@
+# This file ensures the server/api/ directory is tracked by Git
+# Place your API routes here (users.get.ts, auth.post.ts, etc.) 

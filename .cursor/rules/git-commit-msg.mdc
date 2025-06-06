@@ -1,0 +1,80 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Requires well-structured, multi-line git commit messages summarizing all staged changes with semantic prefixes and descriptive body.
+globs:
+alwaysApply: false
+---
+
+- When asked to generate a git commit message:
+  1. First, execute and review `git status` and `git diff` to understand what is staged and what is changing.
+  2. DO NOT USE TERMINAL TOOL FOR `git commit` or `git add`. You can use terminal tool for `git status` and `git diff`.
+  3. Based on the changes, create a well-structured commit message following this format:
+
+     ```md
+     <type>(<scope>): <short summary>
+
+     Concise description of what changed and why.
+     Keep body brief but informative (2-4 lines max).
+
+     Refs: #issue-number (if applicable)
+     BREAKING CHANGE: <description> (if applicable)
+     ```
+
+     **Format Guidelines:**
+     - `type`: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+     - `scope`: the affected folder or module (e.g., components, pages, api, utils)
+     - `summary`: imperative sentence summarizing the change (max 50 characters)
+     - **Body**: 2-4 concise lines maximum, focus on the "what" and "why"
+     - Leave one blank line between the summary and the description body
+     - Use bullet points only for multiple distinct changes (max 3 bullets)
+
+  4. **Conciseness Rules:**
+     - Keep the entire message under 10 lines total
+     - Body should be 2-4 lines maximum
+     - Focus on impact, not implementation details
+     - Omit obvious information that can be inferred from the diff
+     - Use active voice and present tense
+
+  5. Output a full Git command block:
+     - `git commit -m` with a **multi-line** message using proper escaping
+     - Do not execute any commands—**just return them for review**
+
+- **Example Output (Concise Multi-line):**
+
+```bash
+git commit -m "feat(api): add user authentication endpoints
+
+Implements login/logout with JWT tokens and session management.
+Includes input validation and rate limiting.
+
+Refs: #23
+"
+```
+
+- **For Complex Changes (Still Concise):**
+
+```bash
+git commit -m "refactor(components): migrate to Composition API
+
+* Converts 5 components from Options to Composition API
+* Improves type safety and performance
+* Updates related tests and documentation
+"
+```
+
+- **Additional Guidelines:**
+  - For single-file changes: Keep body to 1-2 lines
+  - For multi-file changes: Summarize themes, not individual files
+  - For first commits: Focus on main features/structure established
+  - Skip body entirely for trivial changes (typos, formatting)
+  - Be honest about incomplete work but keep it brief
+
+- Use present tense and active voice ("Adds support for...", not "Added..." or "Support was added...")
+
+- Do not include HTML; use plain Markdown for formatting in body.
+
+- Do not run `git commit` or `git add`—only show the commands.

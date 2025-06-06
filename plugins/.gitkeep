@@ -1,0 +1,2 @@
+# This file ensures the plugins/ directory is tracked by Git
+# Place your Nuxt plugins here (api.client.ts, auth.ts, etc.) - they will be auto-registered 

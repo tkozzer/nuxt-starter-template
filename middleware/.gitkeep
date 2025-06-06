@@ -1,0 +1,2 @@
+# This file ensures the middleware/ directory is tracked by Git
+# Place your route middleware here (auth.ts, admin.global.ts, etc.) 

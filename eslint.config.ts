@@ -14,7 +14,47 @@ export default withNuxt(antfu({
     semi: true,
     quotes: "double",
   },
-  ignores: [".pnpm-store/**", "**/migrations/*"],
+  ignores: [
+    // Dependency and build output
+    "node_modules/**",
+    ".pnpm-store/**",
+    ".nuxt/**",
+    ".output/**",
+    ".nitro/**",
+    ".cache/**",
+    "dist/**",
+
+    // Database migrations and generated data
+    "lib/db/migrations/**",
+
+    // IDE, tooling, and VCS
+    ".vscode/**",
+    ".idea/**",
+    ".cursor/**",
+    ".git/**",
+    ".husky/_/**",
+
+    // Patches & vendor
+    "patches/**",
+
+    // Logs & temp files
+    "*.log",
+    "*.tmp",
+    ".DS_Store",
+    "Thumbs.db",
+
+    // Config & lock files
+    "pnpm-lock.yaml",
+    "package-lock.json",
+    "yarn.lock",
+    "components.json",
+
+    // Public static assets (optional, if you don't want to lint these)
+    "public/**",
+
+    // Ignore everything in scripts if you don't want to lint scripts
+    // "scripts/**",
+  ],
 }, {
   rules: {
     "vue/max-attributes-per-line": ["error", {
@@ -82,5 +122,17 @@ export default withNuxt(antfu({
   files: ["nuxt.config.*", "app.config.*", "eslint.config.*", "tsconfig.*"],
   rules: {
     "unicorn/filename-case": "off",
+  },
+}, {
+  // Allow process.env in config files
+  files: ["drizzle.config.*", "nuxt.config.*"],
+  rules: {
+    "node/no-process-env": "off",
+  },
+}, {
+  // Allow console logs in scripts
+  files: ["scripts/**/*.ts"],
+  rules: {
+    "no-console": "off",
   },
 }));

@@ -168,6 +168,26 @@ useHead({
             Schema validation and type inference with Zod.
           </p>
         </ShadowCard>
+
+        <!-- Feature Card 7 -->
+        <ShadowCard
+          shadow-size="lg"
+          shadow-color="teal-500"
+          dark-shadow-color="teal-400"
+          class="border-2 hover:border-primary/20 transition-colors p-6"
+        >
+          <div class="flex items-center space-x-2 mb-2">
+            <div class="p-2 bg-primary/10 rounded-lg">
+              <Icon name="lucide:database" class="h-6 w-6 text-primary" />
+            </div>
+            <h3 class="text-xl font-semibold">
+              Drizzle ORM
+            </h3>
+          </div>
+          <p class="text-sm text-muted-foreground">
+            TypeScript ORM with SQL-like syntax and excellent developer experience.
+          </p>
+        </ShadowCard>
       </div>
     </div>
 

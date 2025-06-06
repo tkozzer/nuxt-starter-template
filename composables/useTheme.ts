@@ -2,6 +2,7 @@
  * Theme management composable
  * Provides reactive theme state and toggle functionality
  */
+
 export function useTheme() {
   const colorMode = useColorMode();
 

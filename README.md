@@ -1,12 +1,19 @@
 # Nuxt Starter Template
 
-A comprehensive **Nuxt 3** template with modern development tools, state management, and TypeScript support. This template provides everything you need to build scalable, production-ready web applications.
+A comprehensive **Nuxt 3** template with modern development tools, state management, database integration, and TypeScript support. This template provides everything you need to build scalable, production-ready web applications.
 
 ## 🚀 Included Features & Components
 
 ### ✅ **Core Framework**
 
 - **[Nuxt 3.17.4](https://nuxt.com/docs)** - Full-stack Vue.js framework with SSR, auto-imports, and file-based routing
+
+### ✅ **Database & ORM**
+
+- **[Drizzle ORM 0.44.2](https://orm.drizzle.team/)** - TypeScript ORM with SQL-like syntax and excellent TypeScript support
+- **[Drizzle Kit 0.31.1](https://orm.drizzle.team/kit-docs/overview)** - CLI companion for schema management, migrations, and introspection
+- **[PostgreSQL](https://www.postgresql.org/)** - Robust, open-source relational database
+- **[@supabase/supabase-js 2.50.0](https://supabase.com/docs/reference/javascript)** - Supabase client for authentication, real-time, and storage
 
 ### ✅ **UI & Styling**
 
@@ -54,14 +61,25 @@ nuxt-starter-template/
 ├── layouts/            # Page layouts
 ├── middleware/         # Route middleware
 ├── plugins/            # Nuxt plugins
-├── public/             # Static assets
+├── lib/
+│   ├── db/             # Database configuration and schema
+│   │   ├── migrations/ # Database migration files
+│   │   └── schema/     # Drizzle schema definitions
+│   ├── env/            # Environment variable validation
+│   ├── types/          # TypeScript type definitions
+│   └── utils.ts        # Utility functions
+├── scripts/
+│   └── db/             # Database seeding and utility scripts
 ├── server/             # Server-side API routes
+│   └── api/            # API endpoints
+├── public/             # Static assets
 ├── utils/              # Utility functions (auto-imported)
 ├── .cursor/rules/      # Cursor AI rules for development
 ├── nuxt.config.ts      # Nuxt configuration
+├── drizzle.config.ts   # Drizzle ORM configuration
 ├── package.json        # Dependencies and scripts
 ├── tsconfig.json       # TypeScript configuration
-└── eslint.config.mjs   # ESLint configuration
+└── eslint.config.ts    # ESLint configuration
 ```
 
 ## 🛠️ Setup
@@ -81,6 +99,40 @@ yarn install
 # bun
 bun install
 ```
+
+## 🗄️ Database Setup
+
+1. **Set up your database** (PostgreSQL or Supabase)
+2. **Configure environment variables** in `.env`:
+   ```env
+   DATABASE_URL="your-postgresql-connection-string"
+   # For Supabase (optional)
+   SUPABASE_URL="your-supabase-url"
+   SUPABASE_ANON_KEY="your-supabase-anon-key"
+   SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-key"
+   ```
+3. **Generate and run migrations**:
+
+   ```bash
+   # Generate migration files from schema changes
+   pnpm run db:generate
+
+   # Apply migrations to database
+   pnpm run db:migrate
+
+   # Or push schema directly (development)
+   pnpm run db:push
+   ```
+
+4. **Seed the database** (optional):
+
+   ```bash
+   # Seed with sample data
+   pnpm run db:seed
+
+   # Seed with sample users
+   pnpm run db:seed:users
+   ```
 
 ## 🚀 Development Server
 
@@ -102,9 +154,20 @@ pnpm run build        # Build for production
 pnpm run generate     # Generate static site
 pnpm run preview      # Preview production build
 
+# Database
+pnpm run db:generate  # Generate migration files from schema
+pnpm run db:migrate   # Run database migrations
+pnpm run db:push      # Push schema to database (development)
+pnpm run db:studio    # Open Drizzle Studio (database GUI)
+pnpm run db:seed      # Seed database with sample data
+pnpm run db:seed:users # Seed database with sample users
+pnpm run db:delete-all # Delete all data from database
+
 # Code Quality
 pnpm run lint         # Run ESLint
 pnpm run lint:fix     # Run ESLint with auto-fix
+pnpm run typecheck    # Run TypeScript type checking
+pnpm run check        # Run both linting and type checking
 
 # Setup
 pnpm run postinstall  # Prepare Nuxt (auto-run after install)
@@ -129,6 +192,9 @@ pnpm run preview
 ## 📚 Documentation Links
 
 - **[Nuxt 3 Documentation](https://nuxt.com/docs)** - Learn about Nuxt features and API
+- **[Drizzle ORM Documentation](https://orm.drizzle.team/)** - TypeScript ORM for SQL databases
+- **[Drizzle Kit Documentation](https://orm.drizzle.team/kit-docs/overview)** - Migration and schema management tools
+- **[Supabase Documentation](https://supabase.com/docs)** - Open source Firebase alternative
 - **[shadcn-vue Documentation](https://www.shadcn-vue.com/)** - Vue port of shadcn/ui component library
 - **[shadcn-vue Components](https://www.shadcn-vue.com/docs/components)** - Browse all available components
 - **[shadcn-vue CLI](https://www.shadcn-vue.com/docs/cli)** - Command line tools for component management
@@ -140,13 +206,15 @@ pnpm run preview
 ## 🎯 Getting Started
 
 1. **Clone this template** and install dependencies with `pnpm install`
-2. **Start development server** with `pnpm run dev`
-3. **Add shadcn-vue components** with `pnpm dlx shadcn-vue@latest add [component-name]`
-4. **Explore the `/pages`** directory to add your routes
-5. **Check `/assets/css`** for global styles and Tailwind CSS
-6. **Add icons** using the [Nuxt Icon module](https://nuxt.com/modules/icon)
-7. **Manage state** with [Pinia stores](https://pinia.vuejs.org/)
-8. **Validate data** using [Zod schemas](https://zod.dev/)
+2. **Set up your database** and configure environment variables
+3. **Run database migrations** with `pnpm run db:push` or `pnpm run db:migrate`
+4. **Start development server** with `pnpm run dev`
+5. **Add shadcn-vue components** with `pnpm dlx shadcn-vue@latest add [component-name]`
+6. **Explore the `/pages`** directory to add your routes
+7. **Check `/lib/db/schema`** for database schema definitions
+8. **Add icons** using the [Nuxt Icon module](https://nuxt.com/modules/icon)
+9. **Manage state** with [Pinia stores](https://pinia.vuejs.org/)
+10. **Validate data** using [Zod schemas](https://zod.dev/)
 
 ### 🎨 Using shadcn-vue Components
 
@@ -180,6 +248,37 @@ Components are automatically imported in your Vue files:
     </Card>
   </div>
 </template>
+```
+
+### 🗄️ Working with the Database
+
+Define your schema in `lib/db/schema/`:
+
+```typescript
+import { createId } from "@paralleldrive/cuid2";
+// lib/db/schema/users.ts
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+
+export const users = pgTable("users", {
+  id: text("id").primaryKey().$defaultFn(() => createId()),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+```
+
+Use in your API routes:
+
+```typescript
+// server/api/users.get.ts
+import { db } from "~/lib/db";
+import { users } from "~/lib/db/schema";
+
+export default defineEventHandler(async (event) => {
+  const allUsers = await db.select().from(users);
+  return allUsers;
+});
 ```
 
 Happy coding! 🎉

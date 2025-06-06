@@ -3,7 +3,7 @@ export default defineNuxtPlugin(() => {
   const colorMode = useColorMode();
 
   // Initialize the theme based on stored preference or system preference
-  if (import.meta.client) {
+  if ((import.meta as { client?: boolean }).client) {
     // Ensure the theme is applied immediately
     const applyTheme = (theme: string) => {
       const html = document.documentElement;
@@ -15,7 +15,7 @@ export default defineNuxtPlugin(() => {
     applyTheme(colorMode.value);
 
     // Watch for theme changes and apply them
-    watch(() => colorMode.value, (newTheme) => {
+    watch(() => colorMode.value, (newTheme: string) => {
       applyTheme(newTheme);
     }, { immediate: false });
   }

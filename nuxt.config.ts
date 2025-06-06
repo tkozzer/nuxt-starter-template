@@ -1,9 +1,27 @@
 import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "node:url";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-27",
   devtools: { enabled: true },
+
+  runtimeConfig: {
+    databaseUrl: process.env.DATABASE_URL || "",
+    // Supabase server-side keys
+    supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    public: {
+      // Supabase client-side keys (multiple naming conventions for compatibility)
+      supabaseUrl: process.env.SUPABASE_URL || "",
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY || "",
+    },
+  },
+
+  alias: {
+    "@lib": fileURLToPath(new URL("./lib", import.meta.url)),
+    "@db": fileURLToPath(new URL("./lib/db", import.meta.url)),
+    "@schemas": fileURLToPath(new URL("./lib/db/schema", import.meta.url)),
+  },
 
   modules: [
     "@nuxt/eslint",
@@ -33,7 +51,7 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [
-      tailwindcss() as unknown as Plugin,
+      tailwindcss(),
     ],
   },
   shadcn: {

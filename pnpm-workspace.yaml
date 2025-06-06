@@ -1,0 +1,2 @@
+patchedDependencies:
+  "@nuxtjs/color-mode@3.5.2": patches/@nuxtjs__color-mode@3.5.2.patch

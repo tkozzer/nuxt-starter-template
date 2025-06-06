@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+
+export default {
   content: [
     "./components/**/*.{vue,js,ts}",
     "./layouts/**/*.{vue,js,ts}",
@@ -635,4 +636,4 @@ module.exports = {
     "dark:shadow-stone-900",
     "dark:shadow-stone-950",
   ],
-};
+} as Config;

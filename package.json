@@ -8,10 +8,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
+    "postinstall": "nuxt prepare && patch-package",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "typecheck": "nuxi typecheck"
+    "typecheck": "nuxi typecheck",
+    "prepare": "husky"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.45",
@@ -37,7 +38,16 @@
     "@nuxt/eslint": "^1.4.1",
     "eslint": "^9.28.0",
     "eslint-plugin-format": "^1.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "patch-package": "^8.0.0",
     "shadcn-nuxt": "^2.2.0",
     "typescript": "^5.8.3"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": [
+      "pnpm lint",
+      "bash -c 'pnpm typecheck'"
+    ]
   }
 }

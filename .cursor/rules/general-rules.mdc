@@ -1,0 +1,115 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: General rules for Nuxt UI Template - pnpm usage, tech stack, and development conventions
+alwaysApply: true
+---
+
+# General Rules for Nuxt UI Template
+
+**ALWAYS APPLY THESE RULES** - These rules should be followed consistently across this project.
+
+## Package Manager
+
+This project uses **pnpm** as the package manager. Do not use npm, yarn, or other package managers.
+
+### Installing Dependencies
+
+```bash
+# Install all dependencies
+pnpm install
+
+# Add a dependency
+pnpm add <package-name>
+
+# Add a dev dependency
+pnpm add -D <package-name>
+
+# Remove a dependency
+pnpm remove <package-name>
+```
+
+### Using pnpm dlx
+
+Use `pnpm dlx` to execute packages without installing them globally:
+
+```bash
+# Execute a package directly (equivalent to npx)
+pnpm dlx <package-name>
+
+# Examples:
+pnpm dlx nuxi@latest init my-app
+pnpm dlx create-vue@latest my-vue-app
+pnpm dlx @antfu/ni@latest
+pnpm dlx degit user/repo my-project
+```
+
+### Project Scripts
+
+Always use pnpm to run project scripts. You can find all available scripts in [package.json](mdc:package.json):
+
+```bash
+# Development
+pnpm run dev           # Start development server
+pnpm dev              # Short alias for development
+
+# Building
+pnpm run build        # Build for production
+pnpm run generate     # Generate static site
+pnpm run preview      # Preview production build
+
+# Code Quality
+pnpm run lint         # Run ESLint
+pnpm run lint:fix     # Run ESLint with auto-fix
+
+# Setup
+pnpm run postinstall  # Prepare Nuxt (auto-run after install)
+```
+
+## Technology Stack Rules
+
+- **Nuxt 3**: Use Nuxt 3 patterns and composables
+- **TypeScript**: All new files should be TypeScript (.ts/.vue)
+- **Nuxt UI**: Use Nuxt UI components instead of creating custom components when possible
+- **Pinia**: Use Pinia for state management, not Vuex
+- **Zod**: Use Zod for schema validation and type inference
+- **ESLint**: Follow the configured ESLint rules (@antfu/eslint-config)
+
+## File Structure
+
+- Place pages in `app/pages/`
+- Place components in `app/components/`
+- Place styles in `app/assets/css/`
+- Place server routes in `server/api/`
+- Place static assets in `public/`
+
+## Coding Conventions
+
+- Use TypeScript for all new code
+- Follow the ESLint configuration
+- Use Nuxt auto-imports (no need to import Vue composables)
+- Use Nuxt UI components with proper props and styling
+- Implement proper error handling with Zod validation
+- Use Pinia stores for complex state management
+- Prefer composables over mixins
+- Use server-side rendering benefits where appropriate
+
+## Dependencies
+
+When suggesting or adding new dependencies:
+1. Check if the functionality already exists in the current stack
+2. Prefer packages that work well with Nuxt 3
+3. Always use `pnpm add` to install new packages
+4. Update package.json descriptions if adding major features
+5. Consider bundle size impact for client-side packages
+
+## Development Workflow
+
+1. Always run `pnpm install` after pulling changes
+2. Use `pnpm run dev` for development
+3. Run `pnpm run lint` before committing
+4. Use `pnpm run build` to test production builds
+5. Use `pnpm dlx` for one-time command executions

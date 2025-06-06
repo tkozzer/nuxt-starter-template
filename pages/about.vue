@@ -25,23 +25,26 @@ useHead({
           ESLint configuration, automatic imports, and a complete theming system with dark mode support.
         </p>
 
-        <Card class="p-6 mt-8">
-          <CardHeader>
-            <CardTitle>Template Features</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul class="list-disc list-inside space-y-2">
-              <li>Nuxt 3 with TypeScript</li>
-              <li>shadcn-vue component library</li>
-              <li>Tailwind CSS v4 with custom theming</li>
-              <li>Dark/Light mode support</li>
-              <li>Pinia state management</li>
-              <li>Zod validation</li>
-              <li>ESLint with @antfu/eslint-config</li>
-              <li>Auto-imports for components and composables</li>
-            </ul>
-          </CardContent>
-        </Card>
+        <ShadowCard
+          shadow-size="lg"
+          shadow-color="teal-500"
+          dark-shadow-color="teal-400"
+          class="p-6 mt-8"
+        >
+          <h3 class="text-xl font-semibold mb-4">
+            Template Features
+          </h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li>Nuxt 3 with TypeScript</li>
+            <li>shadcn-vue component library</li>
+            <li>Tailwind CSS v4 with custom theming</li>
+            <li>Dark/Light mode support</li>
+            <li>Pinia state management</li>
+            <li>Zod validation</li>
+            <li>ESLint with @antfu/eslint-config</li>
+            <li>Auto-imports for components and composables</li>
+          </ul>
+        </ShadowCard>
       </div>
     </div>
   </div>

@@ -8,14 +8,6 @@ import { cn } from "@/lib/utils";
 
 const props = withDefaults(defineProps<ShadowCardProps>(), SHADOW_CARD_DEFAULTS);
 
-// Console log props for debugging
-console.log("ShadowCard Props:", JSON.stringify({
-  shadowSize: props.shadowSize,
-  shadowColor: props.shadowColor,
-  darkShadowColor: props.darkShadowColor,
-  class: props.class,
-}, null, 2));
-
 // Compute the shadow classes based on props
 const shadowClasses = computed(() => {
   if (props.shadowSize === "none")
@@ -36,21 +28,6 @@ const shadowClasses = computed(() => {
   const dark = props.darkShadowColor ? `dark:shadow-${formatColor(props.darkShadowColor)}` : "";
 
   const finalClasses = [baseClass, light, dark].filter(Boolean).join(" ");
-
-  // Log the computed shadow classes for debugging
-  console.log("📊 Computed Shadow Classes:", JSON.stringify({
-    input: {
-      shadowSize: props.shadowSize,
-      shadowColor: props.shadowColor,
-      darkShadowColor: props.darkShadowColor,
-    },
-    computed: {
-      baseClass,
-      light,
-      dark,
-      finalClasses,
-    },
-  }, null, 2));
 
   return finalClasses;
 });

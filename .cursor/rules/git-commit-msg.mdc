@@ -4,9 +4,21 @@ globs:
 alwaysApply: false
 ---
 ---
-description: Requires well-structured, multi-line git commit messages summarizing all staged changes with semantic prefixes and descriptive body.
+description: Requires well-structured, multi-line git commit messages summarizing all staged changes with semantic prefixes and 
+descriptive body.
 globs:
 alwaysApply: false
+---
+## ⚠️ CRITICAL: CONCISENESS IS MANDATORY ⚠️
+
+**ALWAYS FOLLOW CONCISENESS RULES UNLESS EXPLICITLY ASKED TO IGNORE THEM**
+
+- Maximum 10 lines total for entire commit message
+- Body must be 2-4 lines maximum 
+- Focus on impact, not implementation details
+- Omit obvious information that can be inferred from the diff
+- **Failure to follow conciseness rules is a critical error**
+
 ---
 
 - When asked to generate a git commit message:
@@ -32,12 +44,13 @@ alwaysApply: false
      - Leave one blank line between the summary and the description body
      - Use bullet points only for multiple distinct changes (max 3 bullets)
 
-  4. **Conciseness Rules:**
+  4. **Conciseness Rules (MANDATORY):**
      - Keep the entire message under 10 lines total
      - Body should be 2-4 lines maximum
      - Focus on impact, not implementation details
      - Omit obvious information that can be inferred from the diff
      - Use active voice and present tense
+     - **These rules must be followed unless explicitly told to ignore them**
 
   5. Output a full Git command block:
      - `git commit -m` with a **multi-line** message using proper escaping

@@ -21,6 +21,9 @@ const {
 
 const emit = defineEmits<AuthSignupFormEmits>();
 
+// Auth composable for actual authentication
+const { signup, error } = useAuth();
+
 // Auth form store for state persistence
 const authFormStore = useAuthFormStore();
 const { formData } = storeToRefs(authFormStore);
@@ -44,21 +47,15 @@ const onSubmit = form.handleSubmit(async (values) => {
   isLoading.value = true;
 
   try {
-    console.log("Signup form submitted:", values);
+    const result = await signup(values.name, values.email, values.password);
 
-    // Show development info
-    if (import.meta.dev) {
-      console.log("Demo signup - check console for values");
+    if (result.success) {
+      emit("success");
     }
-
-    // TODO: Implement actual signup logic here
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
-
-    emit("success");
+    // Error handling is managed by the useAuth composable
   }
   catch (error) {
     console.error("Signup error:", error);
-    // TODO: Handle signup errors
   }
   finally {
     isLoading.value = false;
@@ -97,6 +94,11 @@ const onSubmit = form.handleSubmit(async (values) => {
         autocomplete="new-password"
         placeholder="Confirm your password"
       />
+
+      <!-- Error Display -->
+      <div v-if="error" class="text-sm text-destructive">
+        {{ error }}
+      </div>
 
       <!-- Submit Button -->
       <Button

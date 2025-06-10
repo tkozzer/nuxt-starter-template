@@ -16,6 +16,9 @@ type AuthLoginFormEmits = {
 const { showSwitchToSignup = false } = defineProps<AuthLoginFormProps>();
 const emit = defineEmits<AuthLoginFormEmits>();
 
+// Auth composable for actual authentication
+const { login, error } = useAuth();
+
 // Auth form store for state persistence
 const authFormStore = useAuthFormStore();
 const { formData } = storeToRefs(authFormStore);
@@ -37,21 +40,15 @@ const onSubmit = form.handleSubmit(async (values) => {
   isLoading.value = true;
 
   try {
-    console.log("Login form submitted:", values);
+    const result = await login(values.email, values.password);
 
-    // Show test credentials in development
-    if (import.meta.dev) {
-      console.log("Test credentials - Admin: admin@example.com / admin123, User: john.doe@example.com / password123");
+    if (result.success) {
+      emit("success");
     }
-
-    // TODO: Implement actual login logic here
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
-    emit("success");
+    // Error handling is managed by the useAuth composable
   }
   catch (error) {
     console.error("Login error:", error);
-    // TODO: Handle login errors
   }
   finally {
     isLoading.value = false;
@@ -76,6 +73,11 @@ const onSubmit = form.handleSubmit(async (values) => {
         autocomplete="current-password"
         placeholder="Enter your password"
       />
+
+      <!-- Error Display -->
+      <div v-if="error" class="text-sm text-destructive">
+        {{ error }}
+      </div>
 
       <!-- Submit Button -->
       <Button

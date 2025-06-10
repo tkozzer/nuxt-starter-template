@@ -72,9 +72,10 @@ export const useAuthFormStore = defineStore("authForm", () => {
 
   return {
     // State (readonly for external access)
-    formData: readonly(formData),
-    activeTab: readonly(activeTab),
-    context: readonly(context),
+    // Expose raw state so Pinia can properly hydrate without readonly errors
+    formData,
+    activeTab,
+    context,
 
     // Computed
     hasPersistedEmail,

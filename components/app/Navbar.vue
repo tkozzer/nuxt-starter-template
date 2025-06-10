@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Color mode composable for theme toggle
 const colorMode = useColorMode();
+const { user, isAuthenticated } = useAuth();
 
 function toggleColorMode(): void {
   colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
@@ -101,7 +102,7 @@ function toggleColorMode(): void {
               </NuxtLink>
             </NavigationMenuLink>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          <NavigationMenuItem v-if="user?.admin">
             <NavigationMenuLink as-child>
               <NuxtLink
                 to="/users"
@@ -148,7 +149,11 @@ function toggleColorMode(): void {
               <NuxtLink to="/blog" class="text-foreground/70 transition-colors hover:text-foreground">
                 Blog
               </NuxtLink>
-              <NuxtLink to="/users" class="text-foreground/70 transition-colors hover:text-foreground">
+              <NuxtLink
+                v-if="user?.admin"
+                to="/users"
+                class="text-foreground/70 transition-colors hover:text-foreground"
+              >
                 Users
               </NuxtLink>
             </div>
@@ -168,6 +173,17 @@ function toggleColorMode(): void {
 
         <!-- Theme Toggle and Auth Button -->
         <div class="flex items-center space-x-2">
+          <!-- Dashboard Button -->
+          <NuxtLink
+            v-if="isAuthenticated"
+            to="/dashboard"
+          >
+            <Button variant="ghost" size="icon">
+              <Icon name="lucide:layout-dashboard" class="h-4 w-4" />
+              <span class="sr-only">Dashboard</span>
+            </Button>
+          </NuxtLink>
+
           <!-- Theme Toggle Button -->
           <Button
             variant="ghost"

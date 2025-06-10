@@ -10,6 +10,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     databaseUrl: env.DATABASE_URL || "",
+    // Better Auth server-side keys
+    betterAuthSecret: env.BETTER_AUTH_SECRET || "your-secret-key-at-least-32-characters-long-change-in-production",
+    betterAuthUrl: env.BETTER_AUTH_URL || "http://localhost:3000",
     // Supabase server-side keys
     supabaseServiceKey: env.SUPABASE_SERVICE_ROLE_KEY || "",
     public: {

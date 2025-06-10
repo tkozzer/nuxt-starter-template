@@ -1,7 +1,25 @@
-export default defineNuxtPlugin(async () => {
-  // This runs only on the client side
-  const { refresh } = useAuth();
+import type { User } from "@schemas";
 
-  // Check authentication status on app load
-  await refresh();
+import { authClient } from "~/lib/auth-client";
+
+export default defineNuxtPlugin(async () => {
+  // Get initial session state from our API to include admin flag
+  const { user } = await $fetch<{ user: User | null; success: boolean }>("/api/auth/session", { credentials: "include" });
+
+  const authState = useState("auth.state");
+
+  if (user) {
+    authState.value = {
+      user,
+      isLoading: false,
+      error: null,
+    };
+  }
+  else {
+    authState.value = {
+      user: null,
+      isLoading: false,
+      error: null,
+    };
+  }
 });

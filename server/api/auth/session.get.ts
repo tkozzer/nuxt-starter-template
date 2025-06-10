@@ -1,4 +1,8 @@
+import { eq } from "drizzle-orm";
+
 import { auth } from "~/lib/auth";
+import db from "~/lib/db";
+import { user as userTable } from "~/lib/db/schema/auth";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,8 +12,17 @@ export default defineEventHandler(async (event) => {
     });
 
     if (session?.user) {
+      // Fetch admin flag from database to ensure it's present in the session user object
+      const dbUser = await db
+        .select({ admin: userTable.admin })
+        .from(userTable)
+        .where(eq(userTable.id, session.user.id))
+        .limit(1);
+
+      const admin = dbUser[0]?.admin ?? false;
+
       return {
-        user: session.user,
+        user: { ...session.user, admin },
         success: true,
       };
     }

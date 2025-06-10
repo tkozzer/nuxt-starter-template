@@ -1,13 +1,6 @@
 import type { User } from "@schemas";
 
-type AuthSession = {
-  user: User;
-  session: {
-    id: string;
-    token: string;
-    expiresAt: Date;
-  };
-};
+import { authClient } from "~/lib/auth-client";
 
 type AuthState = {
   user: User | null;
@@ -19,7 +12,7 @@ export function useAuth() {
   // SSR-safe reactive state using Nuxt's useState
   const authState = useState<AuthState>("auth.state", () => ({
     user: null,
-    isLoading: true,
+    isLoading: false,
     error: null,
   }));
 
@@ -39,140 +32,93 @@ export function useAuth() {
     };
   };
 
-  // Set auth state
-  const setAuth = (data: AuthSession) => {
-    authState.value = {
-      user: data.user,
-      isLoading: false,
-      error: null,
-    };
-  };
-
   // Set error state
   const setError = (errorMessage: string) => {
-    authState.value = {
-      user: null,
-      isLoading: false,
-      error: errorMessage,
-    };
+    authState.value.error = errorMessage;
+    authState.value.isLoading = false;
   };
 
-  // Set loading state
-  const setLoading = (loading: boolean) => {
-    authState.value.isLoading = loading;
-  };
-
-  // Refresh auth state from server
-  const refresh = async () => {
-    try {
-      setLoading(true);
-
-      const response = await $fetch<{ user: User | null }>("/api/auth/session", {
-        method: "GET",
-      });
-
-      if (response.user) {
-        setAuth({
-          user: response.user,
-          session: {
-            id: "session-id", // This would come from Better Auth
-            token: "session-token", // This would come from Better Auth
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24h from now
-          },
-        });
-      }
-      else {
-        clearAuth();
-      }
-    }
-    catch (error) {
-      console.error("Auth refresh failed:", error);
-      clearAuth();
-    }
-  };
-
-  // Login function
+  // Login function using Better Auth
   const login = async (email: string, password: string) => {
     try {
-      setLoading(true);
+      authState.value.isLoading = true;
       authState.value.error = null;
 
-      const response = await $fetch<{ user: User; success: boolean; error?: string }>("/api/auth/sign-in", {
-        method: "POST",
-        body: { email, password },
+      const { data, error: authError } = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: "/dashboard",
       });
 
-      if (response.success && response.user) {
-        setAuth({
-          user: response.user,
-          session: {
-            id: "session-id",
-            token: "session-token",
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-          },
-        });
-
-        // Navigate to dashboard or intended page
-        await navigateTo("/dashboard");
-        return { success: true };
+      if (authError) {
+        setError(authError.message || "Login failed");
+        return { success: false, error: authError.message };
       }
-      else {
-        setError(response.error || "Login failed");
-        return { success: false, error: response.error };
-      }
-    }
-    catch (error: any) {
-      const errorMessage = error.data?.message || "Login failed";
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  };
 
-  // Signup function
-  const signup = async (name: string, email: string, password: string) => {
-    try {
-      setLoading(true);
-      authState.value.error = null;
-
-      const response = await $fetch<{ user: User; success: boolean; error?: string }>("/api/auth/sign-up", {
-        method: "POST",
-        body: { name, email, password },
-      });
-
-      if (response.success && response.user) {
-        setAuth({
-          user: response.user,
-          session: {
-            id: "session-id",
-            token: "session-token",
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-          },
-        });
+      if (data?.user) {
+        authState.value.user = data.user as User;
+        authState.value.error = null;
+        authState.value.isLoading = false;
 
         // Navigate to dashboard
         await navigateTo("/dashboard");
         return { success: true };
       }
-      else {
-        setError(response.error || "Signup failed");
-        return { success: false, error: response.error };
-      }
+
+      setError("Login failed");
+      return { success: false, error: "Login failed" };
     }
     catch (error: any) {
-      const errorMessage = error.data?.message || "Signup failed";
+      const errorMessage = error.message || "Login failed";
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
   };
 
-  // Logout function
+  // Signup function using Better Auth
+  const signup = async (name: string, email: string, password: string) => {
+    try {
+      authState.value.isLoading = true;
+      authState.value.error = null;
+
+      const { data, error: authError } = await authClient.signUp.email({
+        email,
+        password,
+        name,
+        callbackURL: "/dashboard",
+      });
+
+      if (authError) {
+        setError(authError.message || "Signup failed");
+        return { success: false, error: authError.message };
+      }
+
+      if (data?.user) {
+        authState.value.user = data.user as User;
+        authState.value.error = null;
+        authState.value.isLoading = false;
+
+        // Navigate to dashboard
+        await navigateTo("/dashboard");
+        return { success: true };
+      }
+
+      setError("Signup failed");
+      return { success: false, error: "Signup failed" };
+    }
+    catch (error: any) {
+      const errorMessage = error.message || "Signup failed";
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  };
+
+  // Logout function using Better Auth
   const logout = async () => {
     try {
-      setLoading(true);
+      authState.value.isLoading = true;
 
-      await $fetch("/api/auth/sign-out", {
-        method: "POST",
-      });
+      await authClient.signOut();
 
       clearAuth();
       await navigateTo("/");
@@ -182,6 +128,52 @@ export function useAuth() {
       // Clear auth state even if API call fails
       clearAuth();
       await navigateTo("/");
+    }
+  };
+
+  // Refresh auth state from server
+  const refresh = async () => {
+    try {
+      authState.value.isLoading = true;
+
+      // Build fetch options that work in both client & server contexts
+      const fetchOptions: any = {};
+
+      if (import.meta.client) {
+        // In the browser we can simply include credentials so cookies are sent automatically
+        fetchOptions.credentials = "include" as const;
+      }
+      else {
+        // On the server we need to forward the cookie header manually so the API endpoint
+        // can read the session cookie. Nuxt provides a helper to access request headers.
+        const headers = useRequestHeaders(["cookie"]);
+        if (headers.cookie) {
+          fetchOptions.headers = {
+            cookie: headers.cookie,
+          };
+        }
+      }
+
+      // Get fresh session from our API which augments admin flag
+      const { user: sessionUser } = await $fetch<{ user: User | null; success: boolean }>(
+        "/api/auth/session",
+        fetchOptions,
+      );
+
+      if (sessionUser) {
+        authState.value.user = sessionUser;
+        authState.value.error = null;
+      }
+      else {
+        clearAuth();
+      }
+    }
+    catch (error) {
+      console.error("Auth refresh failed:", error);
+      clearAuth();
+    }
+    finally {
+      authState.value.isLoading = false;
     }
   };
 

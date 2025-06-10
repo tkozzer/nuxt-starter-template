@@ -6,6 +6,10 @@ const EnvSchema = z.object({
   NODE_ENV: z.string(),
   DATABASE_URL: z.string(),
 
+  // Better Auth Configuration
+  BETTER_AUTH_SECRET: z.string().optional(),
+  BETTER_AUTH_URL: z.string().optional(),
+
   // Supabase Configuration
   SUPABASE_DATABASE_URL: z.string().optional(), // Alternative database URL for Supabase
 

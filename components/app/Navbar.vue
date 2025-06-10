@@ -166,7 +166,7 @@ function toggleColorMode(): void {
           </NuxtLink>
         </div>
 
-        <!-- Theme Toggle and User Menu -->
+        <!-- Theme Toggle and Auth Button -->
         <div class="flex items-center space-x-2">
           <!-- Theme Toggle Button -->
           <Button
@@ -187,51 +187,8 @@ function toggleColorMode(): void {
             <span class="sr-only">Toggle theme</span>
           </Button>
 
-          <!-- User Profile Dropdown -->
-          <DropdownMenu>
-            <DropdownMenuTrigger as-child>
-              <Button variant="ghost" class="relative h-8 w-8 rounded-full">
-                <Avatar class="h-8 w-8">
-                  <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              class="w-56"
-              align="end"
-              :side-offset="4"
-            >
-              <DropdownMenuLabel class="font-normal">
-                <div class="flex flex-col space-y-1">
-                  <p class="text-sm font-medium leading-none">
-                    John Doe
-                  </p>
-                  <p class="text-xs leading-none text-muted-foreground">
-                    john.doe@example.com
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Icon name="lucide:user" class="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Icon name="lucide:settings" class="mr-2 h-4 w-4" />
-                <span>Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Icon name="lucide:credit-card" class="mr-2 h-4 w-4" />
-                <span>Billing</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Icon name="lucide:log-out" class="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <!-- Auth Button Component -->
+          <AuthButton />
         </div>
       </div>
     </div>

@@ -106,8 +106,8 @@ useHead({
               <!-- Avatar -->
               <div class="flex-shrink-0">
                 <img
-                  v-if="user.avatar"
-                  :src="user.avatar"
+                  v-if="user.image"
+                  :src="user.image"
                   :alt="`${user.name}'s avatar`"
                   class="h-12 w-12 rounded-full object-cover"
                 >

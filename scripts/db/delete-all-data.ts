@@ -2,11 +2,11 @@ import "dotenv/config";
 import * as readline from "node:readline";
 
 import db from "../../lib/db";
-import { users } from "../../lib/db/schema";
+import { user } from "../../lib/db/schema";
 
 // All tables in the database - add new tables here as they're created
 const TABLES = [
-  { name: "users", table: users },
+  { name: "user", table: user },
   // Add other tables here as you create them
   // { name: "posts", table: posts },
   // { name: "comments", table: comments },

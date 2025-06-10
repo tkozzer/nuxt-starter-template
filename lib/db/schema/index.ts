@@ -1,2 +1,1 @@
-// Export all table schemas
-export * from "./users";
+export * from "./auth";

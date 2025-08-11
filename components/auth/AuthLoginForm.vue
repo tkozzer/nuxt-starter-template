@@ -122,5 +122,11 @@ const onSubmit = form.handleSubmit(async (values) => {
         Sign up
       </Button>
     </div>
+
+    <div class="text-center text-xs">
+      <NuxtLink class="underline text-muted-foreground" to="/auth/forgot-password">
+        Forgot password?
+      </NuxtLink>
+    </div>
   </div>
 </template>

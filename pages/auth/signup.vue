@@ -1,26 +1,16 @@
 <script setup lang="ts">
 // Redirect if already authenticated
 const { isAuthenticated } = useAuth();
-
 if (isAuthenticated.value) {
   await navigateTo("/dashboard");
 }
 
-// Auth form store for cross-page state persistence
-const authFormStore = useAuthFormStore();
-
 // Initialize store for page context
+const authFormStore = useAuthFormStore();
 onMounted(() => {
   authFormStore.initializeForPage("signup");
 });
 
-// Handle successful signup
-function onSignupSuccess() {
-  // Success case is handled by the composable (redirects to dashboard)
-  // TODO: Add actual success handling (e.g., redirect to dashboard)
-}
-
-// Page meta
 definePageMeta({
   layout: false,
   title: "Sign up",
@@ -43,13 +33,9 @@ definePageMeta({
       </div>
 
       <ShadowCard class="px-8">
-        <AuthSignupForm
-          mode="page"
-          @success="onSignupSuccess"
-        />
+        <AuthSignupForm />
       </ShadowCard>
 
-      <!-- Back to Home -->
       <div class="text-center">
         <NuxtLink to="/" class="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Back to home

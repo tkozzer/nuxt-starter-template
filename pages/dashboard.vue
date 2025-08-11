@@ -2,6 +2,26 @@
 // Check if user is authenticated
 const { user, isAuthenticated, logout } = useAuth();
 
+const isEmailPasswordUser = computed(() => true);
+const isUnverified = computed(() => !!user.value && user.value.emailVerified !== true);
+
+async function resendVerification() {
+  try {
+    await $fetch("/api/auth/send-verification-email", {
+      method: "POST",
+      body: {
+        email: user.value?.email,
+        callbackURL: "/verified?redirect=/dashboard",
+      },
+      credentials: "include",
+    });
+    console.log("Verification email sent");
+  }
+  catch (e) {
+    console.error("Failed to resend verification email", e);
+  }
+}
+
 // Redirect to login if not authenticated
 if (!isAuthenticated.value) {
   await navigateTo("/auth/login");
@@ -115,11 +135,21 @@ async function handleLogout() {
                   {{ user?.admin ? 'Administrator' : 'Standard User' }}
                 </span>
               </div>
-              <div class="flex justify-between">
+              <div class="flex items-center justify-between gap-3">
                 <span class="text-sm text-muted-foreground">Email Verified</span>
-                <Badge :variant="user?.emailVerified ? 'default' : 'destructive'">
-                  {{ user?.emailVerified ? 'Verified' : 'Unverified' }}
-                </Badge>
+                <div class="flex items-center gap-2">
+                  <Badge :variant="user?.emailVerified ? 'default' : 'destructive'">
+                    {{ user?.emailVerified ? 'Verified' : 'Unverified' }}
+                  </Badge>
+                  <Button
+                    v-if="isEmailPasswordUser && isUnverified"
+                    size="sm"
+                    variant="outline"
+                    @click="resendVerification"
+                  >
+                    Resend
+                  </Button>
+                </div>
               </div>
               <div class="flex justify-between">
                 <span class="text-sm text-muted-foreground">Member Since</span>

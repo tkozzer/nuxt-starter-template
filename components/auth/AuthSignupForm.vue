@@ -50,6 +50,8 @@ const onSubmit = form.handleSubmit(async (values) => {
     const result = await signup(values.name, values.email, values.password);
 
     if (result.success) {
+      // Redirect to verification notice page
+      await navigateTo(`/verified?redirect=/dashboard`);
       emit("success");
     }
     // Error handling is managed by the useAuth composable

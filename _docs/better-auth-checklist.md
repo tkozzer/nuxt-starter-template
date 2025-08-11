@@ -9,17 +9,19 @@ Use this checklist to finish the Better Auth integration and polish the develope
     - Reference: Ethereal docs (`https://ethereal.email/`, `https://ethereal.email/faq`)
   - [x] Add `.env.example` placeholders for SMTP (Ethereal) keys
   - [x] Install `nodemailer` dependency
+  - [x] Wire up Better Auth email verification hooks (send + verify)
   - [ ] Issue verification tokens using `verification` table (server)
-  - [ ] Send verification email (Nodemailer via Ethereal)
-  - [ ] Add verification callback route (marks `user.emailVerified = true`)
-  - [ ] UI prompts for unverified users and option to resend
+        (Better Auth handles tokens internally; keep for custom flows if needed)
+  - [x] Send verification email (Nodemailer via Ethereal)
+  - [x] Add verification callback route (marks `user.emailVerified = true`)
+  - [x] UI prompt and action to resend verification email for unverified users (Dashboard)
 
 - [ ] Password reset flow
 
-  - [ ] Add `pages/auth/forgot-password.vue` (request reset)
-  - [ ] Add `pages/auth/reset/[token].vue` (set new password)
-  - [ ] Server endpoints to create/consume reset tokens (can reuse `verification` table)
-  - [ ] Link “Forgot password?” from `components/auth/AuthLoginForm.vue`
+  - [x] Add `pages/auth/forgot-password.vue` (request reset)
+  - [x] Add `pages/auth/reset.vue` (query token); remove path token page (use built-in redirect/links)
+  - [x] Use Better Auth endpoints to create/consume reset tokens
+  - [x] Link “Forgot password?” from `components/auth/AuthLoginForm.vue`
 
 - [ ] Social/OAuth providers (Google)
 

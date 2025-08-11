@@ -179,6 +179,24 @@ pnpm run check        # Run both linting and type checking
 pnpm run postinstall  # Prepare Nuxt (auto-run after install)
 ```
 
+## 🔔 Toast Notifications (vue-sonner + shadcn)
+
+This template includes a global Toaster using `vue-sonner`, styled via shadcn-vue.
+
+- Placement: top-center, offset under the sticky navbar. One toast at a time.
+- Progress: custom CSS progress bar driven by `--sonner-duration`.
+- Accessibility: pointer events enabled to remain interactive over dialogs.
+
+Usage in components:
+
+```ts
+// composables/useToasts.ts
+const { info, success, warning, error, promise } = useToasts();
+info("Heads up!", "Informational toast");
+```
+
+Demo buttons are available on the home page (`pages/index.vue`).
+
 ## 🔐 Authentication (Better Auth)
 
 This template ships with Better Auth fully wired-up for email/password, email verification, password reset, and Google OAuth, with SSR-friendly session handling.

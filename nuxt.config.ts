@@ -47,7 +47,11 @@ export default defineNuxtConfig({
     storageKey: "nuxt-color-mode",
   },
 
-  css: ["~/assets/css/main.css"],
+  css: [
+    // Load vendor CSS first so our overrides in main.css take precedence
+    "vue-sonner/style.css",
+    "~/assets/css/main.css",
+  ],
 
   eslint: {
     config: {

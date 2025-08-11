@@ -6,6 +6,41 @@ useHead({
     { name: "description", content: "A comprehensive Nuxt 3 template with shadcn-vue components, Tailwind CSS, TypeScript, and modern development tools." },
   ],
 });
+
+import { useToasts } from "~/composables/useToasts";
+
+const { info, success, warning, error, promise } = useToasts();
+
+function showInfo() {
+  info("Heads up!", "Informational toast");
+}
+
+function showSuccess() {
+  success("Success!", "Your action completed");
+}
+
+function showWarning() {
+  warning("Warning!", "Please double-check your input");
+}
+
+function showError() {
+  error("Error!", "Something went wrong");
+}
+
+async function showPromise() {
+  await promise(
+    () => new Promise(resolve => setTimeout(resolve, 1500)),
+    {
+      loading: "Processing...",
+      success: () => "Done!",
+      error: () => "Failed",
+    },
+  );
+}
+
+function toastInDialog() {
+  info("Dialog toast", "Toast triggered from inside dialog");
+}
 </script>
 
 <template>
@@ -23,6 +58,56 @@ useHead({
         <p class="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
           A modern, comprehensive Nuxt 3 template with shadcn-vue components, Tailwind CSS, TypeScript, and more.
         </p>
+      </div>
+
+      <!-- Toast Demo Buttons -->
+      <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+        <Button variant="outline" @click="showInfo">
+          Info
+        </Button>
+        <Button variant="outline" @click="showSuccess">
+          Success
+        </Button>
+        <Button variant="outline" @click="showWarning">
+          Warning
+        </Button>
+        <Button variant="outline" @click="showError">
+          Error
+        </Button>
+        <Button variant="default" @click="showPromise">
+          Promise
+        </Button>
+
+        <!-- Dialog test: open dialog and trigger a toast inside -->
+        <Dialog>
+          <DialogTrigger as-child>
+            <Button variant="secondary">
+              Open Dialog
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Toast inside dialog</DialogTitle>
+              <DialogDescription>
+                Click the button below to show a toast while this dialog is open.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div class="mt-4">
+              <Button @click="toastInDialog">
+                Show toast in dialog
+              </Button>
+            </div>
+
+            <DialogFooter>
+              <DialogClose as-child>
+                <Button variant="outline">
+                  Close
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <!-- Action Buttons -->

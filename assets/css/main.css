@@ -143,3 +143,51 @@
     @apply mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8;
   }
 }
+
+/* Sonner toast progress bar (driven by --sonner-duration) */
+[data-sonner-toast] {
+  position: relative;
+  /* Keep overflow hidden for internal layout; close button is already inset */
+  overflow: hidden;
+  cursor: pointer;
+}
+
+[data-sonner-toast]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--primary);
+  opacity: 0.6;
+  transform-origin: left;
+  transform: scaleX(1);
+  animation: sonner-progress var(--sonner-duration, 6000ms) linear forwards;
+}
+
+/* Prevent Sonner's built-in expanded-state ::after from moving our bar to the top */
+[data-sonner-toast][data-expanded="true"]::after {
+  bottom: 0 !important;
+  height: 2px !important;
+}
+
+/* Ensure the close (X) button isn't clipped and sits properly within the toast */
+[data-sonner-toast] [data-close-button] {
+  top: 6px !important; /* nudge down from the very top */
+  left: 6px !important; /* align slightly inset from left edge */
+}
+
+/* Ensure toaster renders below the sticky navbar (navbar uses z-50) */
+[data-sonner-toaster] {
+  z-index: 55 !important; /* between navbar z-[60] and dialog overlay/content z-50 */
+}
+
+@keyframes sonner-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}

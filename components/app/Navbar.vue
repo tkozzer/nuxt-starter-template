@@ -9,7 +9,7 @@ function toggleColorMode(): void {
 </script>
 
 <template>
-  <nav class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg shadow-black/10 dark:shadow-white/10">
+  <nav class="sticky top-0 z-[60] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg shadow-black/10 dark:shadow-white/10">
     <div class="container flex h-14 max-w-screen-2xl items-center">
       <!-- Logo/Brand -->
       <div class="mr-4 hidden md:flex">

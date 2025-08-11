@@ -52,6 +52,9 @@ export default withNuxt(antfu({
     // Public static assets (optional, if you don't want to lint these)
     "public/**",
 
+    // Ignore shadcn-vue components
+    "components/ui/**",
+
     // Ignore everything in scripts if you don't want to lint scripts
     // "scripts/**",
   ],

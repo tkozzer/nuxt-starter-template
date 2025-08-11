@@ -8,12 +8,14 @@ import env from "./env";
 const betterAuthSecret = env.BETTER_AUTH_SECRET || "your-secret-key-at-least-32-characters-long-change-in-production";
 const betterAuthUrl = env.BETTER_AUTH_URL || "http://localhost:3000";
 
-// Debug logging
-console.log("Better Auth Config:", {
-  hasSecret: !!betterAuthSecret,
-  secretLength: betterAuthSecret.length,
-  baseURL: betterAuthUrl,
-});
+// Debug logging (development only)
+if (env.NODE_ENV !== "production") {
+  console.warn("Better Auth Config:", {
+    hasSecret: !!betterAuthSecret,
+    secretLength: betterAuthSecret.length,
+    baseURL: betterAuthUrl,
+  });
+}
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {

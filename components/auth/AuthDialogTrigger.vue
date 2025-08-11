@@ -13,8 +13,7 @@ function openAuthDialog() {
   isDialogOpen.value = true;
 }
 
-function onAuthSuccess(data: { mode: "login" | "signup" }) {
-  console.log(`Auth success: ${data.mode}`);
+function onAuthSuccess(_data: { mode: "login" | "signup" }) {
   // You can add custom logic here, like showing a toast notification
   // or redirecting to a specific page
 }

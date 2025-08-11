@@ -17,7 +17,6 @@ onMounted(() => {
 // Handle successful login
 function onLoginSuccess() {
   // Success case is handled by the composable (redirects to dashboard)
-  console.log("Login successful");
   // TODO: Add actual success handling (e.g., redirect to dashboard)
 }
 

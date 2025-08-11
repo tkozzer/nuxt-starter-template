@@ -154,7 +154,7 @@ Flexible signup form with different validation modes:
 const isDialogOpen = ref(false);
 
 function onAuthSuccess(data) {
-  console.log("Auth successful:", data.mode);
+  console.warn("Auth successful:", data.mode);
   // Handle success (redirect, show toast, etc.)
 }
 </script>
@@ -225,7 +225,7 @@ onMounted(() => {
 });
 
 function handleLogin(data) {
-  console.log("Login data:", data);
+  console.warn("Login data:", data);
 }
 
 function switchToSignup() {

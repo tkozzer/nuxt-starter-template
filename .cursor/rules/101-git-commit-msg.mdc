@@ -64,30 +64,42 @@ If there is no explicit instruction to execute, default to the original behavior
      - **These rules must be followed unless explicitly told to ignore them**
 
   5. Output a full Git command block:
-     - `git commit -m` with a **multi-line** message using proper escaping
-     - Do not execute any commands—**just return them for review**
+     - When executing here: use multiple `-m` flags; do NOT embed `\n` inside a single `-m` (they will be committed literally)
+     - When showing for copy/paste: prefer multiple `-m` flags, or use `-F -` with a heredoc
+     - Avoid literal `\n` escape sequences entirely
+     - Do not execute any commands—**just return them for review** (unless the Explicit Execution Exception applies)
 
 - **Example Output (Concise Multi-line):**
 
 ```bash
-git commit -m "feat(api): add user authentication endpoints
+git commit \
+  -m "feat(api): add user authentication endpoints" \
+  -m "Implements login/logout with JWT tokens and session management." \
+  -m "Includes input validation and rate limiting." \
+  -m "Refs: #23"
+```
+
+Heredoc alternative (for copy/paste only; not for automated execution here):
+
+```bash
+git commit -F - <<'MSG'
+feat(api): add user authentication endpoints
 
 Implements login/logout with JWT tokens and session management.
 Includes input validation and rate limiting.
 
 Refs: #23
-"
+MSG
 ```
 
 - **For Complex Changes (Still Concise):**
 
 ```bash
-git commit -m "refactor(components): migrate to Composition API
-
-* Converts 5 components from Options to Composition API
-* Improves type safety and performance
-* Updates related tests and documentation
-"
+git commit \
+  -m "refactor(components): migrate to Composition API" \
+  -m "* Converts 5 components from Options to Composition API" \
+  -m "* Improves type safety and performance" \
+  -m "* Updates related tests and documentation"
 ```
 
 - **Additional Guidelines:**

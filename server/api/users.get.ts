@@ -1,9 +1,9 @@
 import db from "@db";
-import { users } from "@schemas";
+import { user } from "@schemas";
 
 export default defineEventHandler(async () => {
   try {
-    const allUsers = await db.select().from(users);
+    const allUsers = await db.select().from(user);
 
     return {
       success: true,

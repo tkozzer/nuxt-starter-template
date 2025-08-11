@@ -1,0 +1,24 @@
+---
+description: Maintain `_docs` checklists by checking off completed tasks and updating items when new information emerges.
+globs:
+  - "_docs/**/*.md"
+alwaysApply: true
+---
+
+## Checklist Maintenance Rules
+
+- Always update checklists immediately after completing a task:
+  - Check off the specific sub-item(s) completed
+  - Keep parent items unchecked until all child items are done
+  - Optionally add a brief note with concrete details (files touched, key choices like icons/colors, links)
+
+- Modify checklists when new info appears:
+  - Add new sub-items for additional scope or edge cases discovered
+  - Update item text to reflect the actual implementation if it diverges from original plan
+  - Keep notes concise and actionable; reference files and paths using backticks (e.g., `pages/index.vue`)
+
+- Procedure after making code changes tied to a checklist:
+  1. Edit the relevant `_docs/*checklist.md` and mark the item(s) as done
+  2. Include a short note only if it improves clarity (1–2 lines)
+  3. Run linters as usual; keep docs in sync with code changes
+

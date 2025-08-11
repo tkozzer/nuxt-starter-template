@@ -1,56 +1,95 @@
 import "dotenv/config";
+import { eq } from "drizzle-orm";
 
+import { auth } from "../../lib/auth";
 import db from "../../lib/db";
-import { users } from "../../lib/db/schema";
+import { user } from "../../lib/db/schema";
 
 const sampleUsers = [
+  // ADMIN USER
+  {
+    name: "Admin User",
+    email: "admin@example.com",
+    password: "admin123",
+    admin: true,
+  },
+  // REGULAR USERS
   {
     name: "John Doe",
     email: "john.doe@example.com",
-    emailVerified: true,
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    password: "password123",
+    admin: false,
   },
   {
     name: "Jane Smith",
     email: "jane.smith@example.com",
-    emailVerified: true,
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=faces&auto=format&q=60",
+    password: "password123",
+    admin: false,
   },
   {
     name: "Bob Johnson",
     email: "bob.johnson@example.com",
-    emailVerified: false,
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    password: "password123",
+    admin: false,
   },
   {
     name: "Alice Wilson",
     email: "alice.wilson@example.com",
-    emailVerified: true,
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    password: "password123",
+    admin: false,
   },
   {
     name: "Charlie Brown",
     email: "charlie.brown@example.com",
-    emailVerified: false,
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+    password: "password123",
+    admin: false,
   },
 ];
 
 async function seedUsers() {
-  console.log("🌱 Seeding users...");
+  console.log("🌱 Seeding users (5 regular + 1 admin)...");
 
   try {
-    // Clear existing users (optional - remove if you want to keep existing data)
-    await db.delete(users);
-    console.log("🗑️  Cleared existing users");
+    const insertedUsers = [] as Array<{ email: string; name: string; admin: boolean }>;
 
-    // Insert sample users
-    const insertedUsers = await db.insert(users).values(sampleUsers).returning();
+    for (const userData of sampleUsers) {
+      try {
+        // Use Better Auth API to create users - this handles ID generation
+        const result = await auth.api.signUpEmail({
+          body: {
+            email: userData.email,
+            password: userData.password,
+            name: userData.name,
+          },
+        });
 
-    console.log(`✅ Successfully seeded ${insertedUsers.length} users:`);
-    insertedUsers.forEach((user) => {
-      console.log(`   - ${user.name} (${user.email})`);
-    });
+        if (result && result.user) {
+          insertedUsers.push({
+            email: userData.email,
+            name: userData.name,
+            admin: userData.admin,
+          });
+          const userType = userData.admin ? "👑 ADMIN" : "👤 USER";
+          console.log(`   ✅ Created ${userType}: ${userData.name} (${userData.email})`);
+        }
+      }
+      catch {
+        console.log(`   ⚠️  Skipped ${userData.email} (may already exist)`);
+      }
+      finally {
+        // Ensure admin flag is set even if the user existed already
+        if (userData.admin) {
+          await db
+            .update(user)
+            .set({ admin: true })
+            .where(eq(user.email, userData.email));
+          console.log(`   👑 Ensured admin privileges for ${userData.email}`);
+        }
+      }
+    }
+
+    console.log(`🎉 Successfully seeded ${insertedUsers.length} users!`);
+    console.log("📋 See credentials in scripts/docs/ directory");
   }
   catch (error) {
     console.error("❌ Error seeding users:", error);

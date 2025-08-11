@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { User } from "@schemas";
 
+import { useLocalStorage } from "@vueuse/core";
+
 type ApiResponse = {
   success: boolean;
   data: User[];
@@ -9,6 +11,13 @@ type ApiResponse = {
 
 // Fetch users from API
 const { data, pending, error, refresh } = await useFetch<ApiResponse>("/api/users");
+
+// Persisted view mode ("card" | "list")
+const viewMode = useLocalStorage<"card" | "list">("users.viewMode", "card");
+
+function setViewMode(mode: "card" | "list") {
+  viewMode.value = mode;
+}
 
 // Format date for display
 function formatDate(date: Date | string) {
@@ -43,6 +52,8 @@ useHead({
     },
   ],
 });
+
+definePageMeta({ middleware: "admin" });
 </script>
 
 <template>
@@ -85,18 +96,40 @@ useHead({
         <p class="text-sm text-muted-foreground">
           Showing {{ data.count }} user{{ data.count !== 1 ? 's' : '' }}
         </p>
-        <Button
-          variant="outline"
-          size="sm"
-          @click="refresh()"
-        >
-          <Icon name="lucide:refresh-cw" class="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
+        <div class="flex items-center gap-2">
+          <!-- View Toggle -->
+          <Button
+            :variant="viewMode === 'card' ? 'secondary' : 'ghost'"
+            size="icon"
+            aria-label="Card view"
+            @click="setViewMode('card')"
+          >
+            <Icon name="lucide:grid" class="h-4 w-4" />
+          </Button>
+          <Button
+            :variant="viewMode === 'list' ? 'secondary' : 'ghost'"
+            size="icon"
+            aria-label="List view"
+            @click="setViewMode('list')"
+          >
+            <Icon name="lucide:list" class="h-4 w-4" />
+          </Button>
+
+          <!-- Refresh -->
+          <Button
+            variant="outline"
+            size="sm"
+            aria-label="Refresh"
+            @click="refresh()"
+          >
+            <Icon name="lucide:refresh-cw" class="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card
+      <!-- Card View -->
+      <div v-if="viewMode === 'card'" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <ShadowCard
           v-for="user in data.data"
           :key="user.id"
           class="overflow-hidden"
@@ -106,8 +139,8 @@ useHead({
               <!-- Avatar -->
               <div class="flex-shrink-0">
                 <img
-                  v-if="user.avatar"
-                  :src="user.avatar"
+                  v-if="user.image"
+                  :src="user.image"
                   :alt="`${user.name}'s avatar`"
                   class="h-12 w-12 rounded-full object-cover"
                 >
@@ -148,7 +181,69 @@ useHead({
               </div>
             </div>
           </CardContent>
-        </Card>
+        </ShadowCard>
+      </div>
+
+      <!-- List View -->
+      <div v-else>
+        <div class="overflow-x-auto rounded-lg border">
+          <table class="min-w-full divide-y divide-border text-sm">
+            <thead class="bg-muted/50">
+              <tr>
+                <th class="px-6 py-3 text-left font-semibold tracking-wide text-muted-foreground">
+                  Name
+                </th>
+                <th class="px-6 py-3 text-left font-semibold tracking-wide text-muted-foreground">
+                  Email
+                </th>
+                <th class="px-6 py-3 text-left font-semibold tracking-wide text-muted-foreground">
+                  Role
+                </th>
+                <th class="px-6 py-3 text-left font-semibold tracking-wide text-muted-foreground">
+                  Joined
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border bg-card">
+              <tr
+                v-for="user in data.data"
+                :key="user.id"
+                class="hover:bg-muted/20"
+              >
+                <td class="px-6 py-4 whitespace-nowrap flex items-center gap-2">
+                  <img
+                    v-if="user.image"
+                    :src="user.image"
+                    :alt="`${user.name}'s avatar`"
+                    class="h-8 w-8 rounded-full object-cover"
+                  >
+                  <div v-else class="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                    <Icon name="lucide:user" class="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <span class="truncate">{{ user.name }}</span>
+                  <Badge
+                    v-if="user.emailVerified"
+                    variant="secondary"
+                    class="text-[10px] ml-2"
+                  >
+                    Verified
+                  </Badge>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-muted-foreground truncate max-w-[200px]">
+                  {{ user.email }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <Badge variant="secondary">
+                    {{ user.admin ? 'Admin' : 'User' }}
+                  </Badge>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-muted-foreground">
+                  {{ formatDate(user.createdAt) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 

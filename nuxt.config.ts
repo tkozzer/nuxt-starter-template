@@ -1,19 +1,24 @@
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 
+import env from "./lib/env";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-27",
   devtools: { enabled: true },
 
   runtimeConfig: {
-    databaseUrl: process.env.DATABASE_URL || "",
+    databaseUrl: env.DATABASE_URL || "",
+    // Better Auth server-side keys
+    betterAuthSecret: env.BETTER_AUTH_SECRET || "your-secret-key-at-least-32-characters-long-change-in-production",
+    betterAuthUrl: env.BETTER_AUTH_URL || "http://localhost:3000",
     // Supabase server-side keys
-    supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    supabaseServiceKey: env.SUPABASE_SERVICE_ROLE_KEY || "",
     public: {
       // Supabase client-side keys (multiple naming conventions for compatibility)
-      supabaseUrl: process.env.SUPABASE_URL || "",
-      supabaseAnonKey: process.env.SUPABASE_ANON_KEY || "",
+      supabaseUrl: env.SUPABASE_URL || "",
+      supabaseAnonKey: env.SUPABASE_ANON_KEY || "",
     },
   },
 

@@ -77,20 +77,29 @@ export default withNuxt(antfu({
     "unicorn/filename-case": ["error", {
       case: "kebabCase",
       ignore: [
-        "README.md",
+        /.*\.md$/,
       ],
     }],
   },
 }, {
-  // Components should use PascalCase
-  files: ["components/**/*.vue"],
+  files: ["components/**"],
   rules: {
     "unicorn/filename-case": ["error", {
       case: "pascalCase",
+      ignore: [
+        /.*\.md$/,
+      ],
+    }],
+    "symbol-description": ["off"],
+  },
+}, {
+  files: ["components/ui/**/*.ts"],
+  rules: {
+    "unicorn/filename-case": ["error", {
+      case: "camelCase",
     }],
   },
 }, {
-  // Composables should use camelCase
   files: ["composables/**/*.ts"],
   rules: {
     "unicorn/filename-case": ["error", {
@@ -98,41 +107,8 @@ export default withNuxt(antfu({
     }],
   },
 }, {
-  // Utils should use camelCase
-  files: ["utils/**/*.ts"],
-  rules: {
-    "unicorn/filename-case": ["error", {
-      case: "camelCase",
-    }],
-  },
-}, {
-  // Disable filename-case for dynamic route files (they contain square brackets)
-  files: ["**/*\\[*"],
-  rules: {
-    "unicorn/filename-case": "off",
-  },
-}, {
-  // Disable filename-case for files with special Nuxt suffixes
-  files: ["**/*.global.*", "**/*.client.*", "**/*.server.*"],
-  rules: {
-    "unicorn/filename-case": "off",
-  },
-}, {
-  // Disable filename-case for config files
-  files: ["nuxt.config.*", "app.config.*", "eslint.config.*", "tsconfig.*"],
-  rules: {
-    "unicorn/filename-case": "off",
-  },
-}, {
-  // Allow process.env in config files
-  files: ["drizzle.config.*", "nuxt.config.*"],
-  rules: {
-    "node/no-process-env": "off",
-  },
-}, {
-  // Allow console logs in scripts
   files: ["scripts/**/*.ts"],
   rules: {
-    "no-console": "off",
+    "no-console": ["off"],
   },
 }));

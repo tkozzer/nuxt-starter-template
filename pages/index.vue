@@ -27,10 +27,14 @@ useHead({
 
       <!-- Action Buttons -->
       <div class="flex flex-col sm:flex-row gap-4">
-        <Button size="lg" class="text-lg px-8">
+        <AuthDialogTrigger
+          mode="signup"
+          size="lg"
+          class="text-lg px-8"
+        >
           <Icon name="lucide:rocket" class="mr-2 h-5 w-5" />
           Get Started
-        </Button>
+        </AuthDialogTrigger>
         <Button
           variant="outline"
           size="lg"
@@ -186,6 +190,26 @@ useHead({
           </div>
           <p class="text-sm text-muted-foreground">
             TypeScript ORM with SQL-like syntax and excellent developer experience.
+          </p>
+        </ShadowCard>
+
+        <!-- Feature Card 8 -->
+        <ShadowCard
+          shadow-size="lg"
+          shadow-color="amber-500"
+          dark-shadow-color="amber-400"
+          class="border-2 hover:border-primary/20 transition-colors p-6"
+        >
+          <div class="flex items-center space-x-2 mb-2">
+            <div class="p-2 bg-primary/10 rounded-lg">
+              <Icon name="lucide:key-round" class="h-6 w-6 text-primary" />
+            </div>
+            <h3 class="text-xl font-semibold">
+              Better Auth
+            </h3>
+          </div>
+          <p class="text-sm text-muted-foreground">
+            Email/password auth with SSR-safe sessions, admin roles, and Drizzle integration.
           </p>
         </ShadowCard>
       </div>

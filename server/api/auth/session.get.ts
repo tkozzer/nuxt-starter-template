@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     };
   }
   catch (error) {
-    console.error("Session validation error:", error);
+    event.context.logger.warn({ msg: "auth:session:validation_error", err: error });
     return {
       user: null,
       success: false,

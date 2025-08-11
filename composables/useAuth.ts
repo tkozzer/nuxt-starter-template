@@ -1,6 +1,7 @@
 import type { User } from "@schemas";
 
 import { authClient } from "~/lib/auth-client";
+import { createClientLogger } from "~/lib/logger/client";
 
 type AuthState = {
   user: User | null;
@@ -153,7 +154,8 @@ export function useAuth() {
       await navigateTo("/");
     }
     catch (error) {
-      console.error("Logout failed:", error);
+      const log = createClientLogger("auth:logout");
+      log("logout failed: %o", error);
       // Clear auth state even if API call fails
       clearAuth();
       await navigateTo("/");
@@ -198,7 +200,8 @@ export function useAuth() {
       }
     }
     catch (error) {
-      console.error("Auth refresh failed:", error);
+      const log = createClientLogger("auth:refresh");
+      log("auth refresh failed: %o", error);
       clearAuth();
     }
     finally {

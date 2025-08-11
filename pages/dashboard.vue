@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import { navigateTo } from "nuxt/app";
+
+import { createClientLogger } from "~/lib/logger/client";
+
 // Check if user is authenticated
 const { user, logout } = useAuth();
 
 const isEmailPasswordUser = computed(() => true);
 const isUnverified = computed(() => !!user.value && user.value.emailVerified !== true);
+
+const log = createClientLogger("page:dashboard");
 
 async function resendVerification() {
   try {
@@ -15,10 +21,10 @@ async function resendVerification() {
       },
       credentials: "include",
     });
-    console.warn("Verification email sent");
+    log("verification email sent");
   }
   catch (e) {
-    console.error("Failed to resend verification email", e);
+    log("failed to resend verification email: %o", e);
   }
 }
 // Page meta

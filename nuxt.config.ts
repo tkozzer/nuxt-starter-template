@@ -19,6 +19,8 @@ export default defineNuxtConfig({
       // Supabase client-side keys (multiple naming conventions for compatibility)
       supabaseUrl: env.SUPABASE_URL || "",
       supabaseAnonKey: env.SUPABASE_ANON_KEY || "",
+      // Debug namespaces for browser
+      debugNamespaces: env.NUXT_PUBLIC_DEBUG || "",
     },
   },
 

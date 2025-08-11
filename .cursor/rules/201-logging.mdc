@@ -1,0 +1,104 @@
+---
+description: Logging rules for this Nuxt 3 template — Pino for server, debug for client, env consistency, and review checklist
+globs:
+  - "server/**/*.ts"
+  - "lib/**/*.ts"
+  - "plugins/**/*.ts"
+  - "middleware/**/*.ts"
+  - "pages/**/*.vue"
+  - "composables/**/*.ts"
+alwaysApply: true
+---
+
+### Logging Rules (Nuxt 3 + Nitro)
+
+These rules define how logging is implemented and used in this project. Follow them whenever you touch server code, client code, or environment variables related to logging.
+
+#### Tech choices
+
+- Server logging: Pino (structured JSON), with pretty output in dev only
+- Client/browser logging: debug (namespace-based)
+- Request correlation: `x-request-id` header generated/propagated per request
+- Controlled via env; must follow the Env Consistency rule (see 102-env-consistency.mdc)
+
+#### Dependencies (pnpm only)
+
+- runtime: `pino`, `debug`
+- optional runtime: `pino-http` (not required; we use H3 middleware)
+- dev: `pino-pretty`, `@types/debug`
+
+#### Files (current implementation)
+
+- Server build + request context
+  - `lib/logger/server.ts` — Pino singleton + child logger helpers
+  - `server/middleware/logger.global.ts` — Attaches per-request logger and `x-request-id`
+  - `server/middleware/request-logger.global.ts` — Request start/finish logs (guarded by `LOG_REQUESTS`)
+  - `server/plugins/error-logger.ts` — Nitro error hook → error logs with context
+  - `server/types/h3.d.ts` — Augments `H3EventContext` with `logger: Logger`
+- Client/runtime
+  - `lib/logger/client.ts` — `createClientLogger(namespace)` helper
+  - `plugins/debug.client.ts` — Enables debug namespaces from env or `localStorage.debug`, provides `$debug`
+
+#### Environment variables (must be in `.env.example`, `.env`, and `lib/env/index.ts`)
+
+- `LOG_LEVEL` — `trace|debug|info|warn|error|fatal` (default `info`)
+- `LOG_PRETTY` — `true|false` (enable pretty printing locally only)
+- `LOG_REQUESTS` — `true|false` (HTTP request/response logging toggle)
+- `LOG_REDACT` — JSON array of redaction paths (e.g. `"headers.authorization"`, `"headers.cookie"`, `"body.password"`)
+- `NUXT_PUBLIC_DEBUG` — default browser debug namespaces (e.g. `app:*,feature:*`)
+
+Always run:
+
+```bash
+pnpm run env:check
+```
+
+#### Usage rules — server (Pino)
+
+- Do not use `console.*` in server code. Use the per-request logger: `event.context.logger`.
+- Prefer child loggers with contextual bindings for subsystems or long flows.
+- Never log secrets or full request/response bodies. Redaction is enabled for common sensitive fields.
+- Request logging is centralized in `request-logger.global.ts` and controlled by `LOG_REQUESTS`.
+- Errors are captured via Nitro error hook; do not duplicate error logging in handlers unless adding domain-specific context.
+
+Minimal example (server):
+
+```ts
+// inside an API handler
+event.context.logger.debug({ userId, action: "update-profile" });
+```
+
+#### Usage rules — client (debug)
+
+- Use `createClientLogger('feature:xyz')` instead of `console.*`.
+- Namespaces should reflect feature/module (e.g., `app:navigation`, `auth:login`).
+- Enable at runtime:
+  - `localStorage.debug = 'app:*,feature:*'; location.reload()`
+  - Disable: `localStorage.removeItem('debug'); location.reload()`
+
+Minimal example (client):
+
+```ts
+const log = createClientLogger('app:navigation');
+log('navigating to %s', path);
+```
+
+#### Request correlation
+
+- Every server request gets a `requestId` (`x-request-id`), attached to logs and echoed in response headers.
+- If a gateway or client provides `x-request-id`, we reuse it.
+
+#### Production guidance
+
+- `LOG_PRETTY=false` in production; ship structured JSON to stdout for log aggregation.
+- Keep redaction list comprehensive. Never log credentials, tokens, cookies, or PII.
+
+#### Code review checklist (logging-related changes)
+
+- Env variables added/changed? Update `.env.example` and `lib/env/index.ts` and run `pnpm run env:check`.
+- Server code: no `console.*`. Uses `event.context.logger` with helpful context.
+- Client code: uses `createClientLogger` and meaningful namespaces.
+- No sensitive data in logs. Request/response bodies are not logged.
+- Request IDs appear in logs for end-to-end correlation.
+- CI check: `pnpm check` or `pnpm check:fix` are green.
+

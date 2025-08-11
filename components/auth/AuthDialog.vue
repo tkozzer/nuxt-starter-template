@@ -73,7 +73,7 @@ watch(isOpen, (newValue) => {
       <Tabs
         :model-value="activeTab"
         class="w-full"
-        @update:model-value="switchTab"
+        @update:model-value="(val) => switchTab(val as 'login' | 'signup')"
       >
         <TabsList class="grid w-full grid-cols-2 dark:bg-muted/20">
           <TabsTrigger value="login">

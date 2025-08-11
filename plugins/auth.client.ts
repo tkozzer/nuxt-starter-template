@@ -1,7 +1,5 @@
 import type { User } from "@schemas";
 
-import { authClient } from "~/lib/auth-client";
-
 export default defineNuxtPlugin(async () => {
   // Get initial session state from our API to include admin flag
   const { user } = await $fetch<{ user: User | null; success: boolean }>("/api/auth/session", { credentials: "include" });

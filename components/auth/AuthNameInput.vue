@@ -36,7 +36,7 @@ const emit = defineEmits<{
           :autocomplete="autocomplete"
           :placeholder="placeholder"
           :model-value="modelValue"
-          @update:model-value="emit('update:modelValue', $event)"
+          @update:model-value="emit('update:modelValue', String($event))"
         />
       </FormControl>
       <FormMessage />

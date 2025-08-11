@@ -31,21 +31,25 @@ The auth form store manages persistent state across all auth components:
 
 ```typescript
 // State
-formData: {
-  email: string;    // Persists across tabs/pages
-  name: string;     // Persists across tabs/pages
-  // Passwords are NEVER persisted for security
-}
-activeTab: 'login' | 'signup';
-context: 'dialog' | 'page';
+type AuthFormState = {
+  formData: {
+    email: string; // Persists across tabs/pages
+    name: string; // Persists across tabs/pages
+    // Passwords are NEVER persisted for security
+  };
+  activeTab: "login" | "signup";
+  context: "dialog" | "page";
+};
 
 // Actions
-updateEmail(email: string)
-updateName(name: string)
-switchTab(tab: 'login' | 'signup')
-initializeForDialog(initialTab)
-initializeForPage(page)
-resetOnDialogClose()
+type AuthFormActions = {
+  updateEmail: (email: string) => void;
+  updateName: (name: string) => void;
+  switchTab: (tab: "login" | "signup") => void;
+  initializeForDialog: (initialTab?: "login" | "signup") => void;
+  initializeForPage: (page: "login" | "signup") => void;
+  resetOnDialogClose: () => void;
+};
 ```
 
 ### 🔐 Security Note

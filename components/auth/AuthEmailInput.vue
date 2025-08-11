@@ -31,7 +31,7 @@ const emit = defineEmits<{
           :autocomplete="autocomplete"
           placeholder="Enter your email"
           :model-value="modelValue"
-          @update:model-value="emit('update:modelValue', $event)"
+          @update:model-value="emit('update:modelValue', String($event))"
         />
       </FormControl>
       <FormMessage />

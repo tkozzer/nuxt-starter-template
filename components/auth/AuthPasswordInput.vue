@@ -48,7 +48,7 @@ function toggleVisibility() {
             :placeholder="placeholder"
             class="pr-10"
             :model-value="modelValue"
-            @update:model-value="emit('update:modelValue', $event)"
+            @update:model-value="emit('update:modelValue', String($event))"
           />
           <!-- Toggle visibility button -->
           <button

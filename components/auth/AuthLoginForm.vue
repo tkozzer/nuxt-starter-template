@@ -17,7 +17,7 @@ const { showSwitchToSignup = false } = defineProps<AuthLoginFormProps>();
 const emit = defineEmits<AuthLoginFormEmits>();
 
 // Auth composable for actual authentication
-const { login, error } = useAuth();
+const { login, loginWithGoogle, error } = useAuth();
 
 // Auth form store for state persistence
 const authFormStore = useAuthFormStore();
@@ -93,6 +93,23 @@ const onSubmit = form.handleSubmit(async (values) => {
         {{ isLoading ? 'Signing in...' : 'Sign in' }}
       </Button>
     </form>
+
+    <!-- Divider -->
+    <div class="relative text-center">
+      <span class="bg-background px-2 text-xs text-muted-foreground relative z-10">or</span>
+      <div class="absolute left-0 right-0 top-1/2 h-px bg-border" />
+    </div>
+
+    <!-- Social Login -->
+    <Button
+      type="button"
+      variant="outline"
+      class="w-full"
+      @click="loginWithGoogle()"
+    >
+      <Icon name="logos:google-icon" class="mr-2 h-5 w-5" />
+      Continue with Google
+    </Button>
 
     <!-- Switch to Signup -->
     <div v-if="showSwitchToSignup" class="text-center text-sm">

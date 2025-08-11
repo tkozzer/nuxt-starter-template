@@ -50,7 +50,7 @@ async function seedUsers() {
   console.log("🌱 Seeding users (5 regular + 1 admin)...");
 
   try {
-    const insertedUsers = [];
+    const insertedUsers = [] as Array<{ email: string; name: string; admin: boolean }>;
 
     for (const userData of sampleUsers) {
       try {
@@ -63,23 +63,28 @@ async function seedUsers() {
           },
         });
 
-        if (result) {
-          insertedUsers.push(result.user);
+        if (result && result.user) {
+          insertedUsers.push({
+            email: userData.email,
+            name: userData.name,
+            admin: userData.admin,
+          });
           const userType = userData.admin ? "👑 ADMIN" : "👤 USER";
           console.log(`   ✅ Created ${userType}: ${userData.name} (${userData.email})`);
-
-          // If this should be an admin, update the admin field
-          if (userData.admin) {
-            await db
-              .update(user)
-              .set({ admin: true })
-              .where(eq(user.email, userData.email));
-            console.log(`   👑 Set admin privileges for ${userData.email}`);
-          }
         }
       }
       catch {
         console.log(`   ⚠️  Skipped ${userData.email} (may already exist)`);
+      }
+      finally {
+        // Ensure admin flag is set even if the user existed already
+        if (userData.admin) {
+          await db
+            .update(user)
+            .set({ admin: true })
+            .where(eq(user.email, userData.email));
+          console.log(`   👑 Ensured admin privileges for ${userData.email}`);
+        }
       }
     }
 

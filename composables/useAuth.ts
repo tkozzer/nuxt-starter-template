@@ -75,6 +75,35 @@ export function useAuth() {
     }
   };
 
+  // Login with Google using Better Auth
+  const loginWithGoogle = async () => {
+    try {
+      authState.value.isLoading = true;
+      authState.value.error = null;
+
+      // Redirect-based OAuth flow
+      const { error: authError } = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      } as any);
+
+      if (authError) {
+        setError(authError.message || "Google sign-in failed");
+        return { success: false, error: authError.message };
+      }
+
+      return { success: true };
+    }
+    catch (error: any) {
+      const errorMessage = error.message || "Google sign-in failed";
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+    finally {
+      authState.value.isLoading = false;
+    }
+  };
+
   // Signup function using Better Auth
   const signup = async (name: string, email: string, password: string) => {
     try {
@@ -189,6 +218,7 @@ export function useAuth() {
     login,
     signup,
     logout,
+    loginWithGoogle,
     refresh,
     clearAuth,
   };

@@ -22,7 +22,7 @@ const {
 const emit = defineEmits<AuthSignupFormEmits>();
 
 // Auth composable for actual authentication
-const { signup, error } = useAuth();
+const { signup, loginWithGoogle, error } = useAuth();
 
 // Auth form store for state persistence
 const authFormStore = useAuthFormStore();
@@ -114,6 +114,23 @@ const onSubmit = form.handleSubmit(async (values) => {
         {{ isLoading ? 'Creating account...' : 'Create account' }}
       </Button>
     </form>
+
+    <!-- Divider -->
+    <div class="relative text-center">
+      <span class="bg-background px-2 text-xs text-muted-foreground relative z-10">or</span>
+      <div class="absolute left-0 right-0 top-1/2 h-px bg-border" />
+    </div>
+
+    <!-- Social Sign Up -->
+    <Button
+      type="button"
+      variant="outline"
+      class="w-full"
+      @click="loginWithGoogle()"
+    >
+      <Icon name="logos:google-icon" class="mr-2 h-5 w-5" />
+      Continue with Google
+    </Button>
 
     <!-- Switch to Login -->
     <div v-if="showSwitchToLogin" class="text-center text-sm">

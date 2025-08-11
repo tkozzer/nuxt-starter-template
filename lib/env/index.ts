@@ -19,6 +19,10 @@ const EnvSchema = z.object({
 
   // Nuxt Private Variables (server-side only)
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(), // Supabase service role key (server-side only)
+
+  // OAuth Providers (Google)
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
 });
 
 export type EnvSchema = z.infer<typeof EnvSchema>;

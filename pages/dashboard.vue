@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Check if user is authenticated
-const { user, isAuthenticated, logout } = useAuth();
+const { user, logout } = useAuth();
 
 const isEmailPasswordUser = computed(() => true);
 const isUnverified = computed(() => !!user.value && user.value.emailVerified !== true);
@@ -15,21 +15,16 @@ async function resendVerification() {
       },
       credentials: "include",
     });
-    console.log("Verification email sent");
+    console.warn("Verification email sent");
   }
   catch (e) {
     console.error("Failed to resend verification email", e);
   }
 }
-
-// Redirect to login if not authenticated
-if (!isAuthenticated.value) {
-  await navigateTo("/auth/login");
-}
-
 // Page meta
 definePageMeta({
   title: "Dashboard",
+  middleware: "auth",
 });
 
 // Handle logout

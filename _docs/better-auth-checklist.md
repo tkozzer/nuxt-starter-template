@@ -10,8 +10,8 @@ Use this checklist to finish the Better Auth integration and polish the develope
   - [x] Add `.env.example` placeholders for SMTP (Ethereal) keys
   - [x] Install `nodemailer` dependency
   - [x] Wire up Better Auth email verification hooks (send + verify)
-  - [ ] Issue verification tokens using `verification` table (server)
-        (Better Auth handles tokens internally; keep for custom flows if needed)
+  - [?] Issue verification tokens using `verification` table (server)
+    (Better Auth handles tokens internally; keep for custom flows if needed)
   - [x] Send verification email (Nodemailer via Ethereal)
   - [x] Add verification callback route (marks `user.emailVerified = true`)
   - [x] UI prompt and action to resend verification email for unverified users (Dashboard)
@@ -32,11 +32,12 @@ Use this checklist to finish the Better Auth integration and polish the develope
   - [x] Sync `.env` placeholders for Google keys
   - [ ] Add notes in `README.md`
 
-- [ ] General auth middleware
+- [x] General auth middleware
 
-  - [ ] Create `middleware/auth.ts` to protect authenticated-only routes
-  - [ ] Apply to pages beyond admin (e.g., `pages/dashboard.vue`)
-  - [ ] (Optional) `middleware/email-verified.ts` to require verified email
+  - [x] Create `middleware/auth.ts` to protect authenticated-only routes
+  - [x] Apply to pages beyond admin (e.g., `pages/dashboard.vue`)
+  - [x] (Optional) `middleware/email-verified.ts` to require verified email
+    - Notes: Added `middleware/auth.ts`, applied via `definePageMeta({ middleware: 'auth' })` in `pages/dashboard.vue`; created `middleware/email-verified.ts` (not enforced by default to allow unverified users to see resend UI).
 
 - [x] Home page updates (show Better Auth in feature cards)
 

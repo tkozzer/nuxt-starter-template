@@ -30,6 +30,12 @@ A comprehensive **Nuxt 3** template with modern development tools, state managem
 - **[Pinia 3.0.3](https://pinia.vuejs.org/)** - TypeScript-first Vue state management library
 - **[@pinia/nuxt 0.11.1](https://pinia.vuejs.org/ssr/nuxt.html)** - Official Nuxt integration for Pinia
 
+### ✅ **Authentication**
+
+- **[Better Auth 1.2.x](https://github.com/better-auth/better-auth#readme)** - Email/password, email verification, password reset, Google OAuth
+- Middleware: `auth`, `admin`, optional `email-verified`
+- SSR-friendly session refresh with cookie forwarding
+
 ### ✅ **Validation & Type Safety**
 
 - **[Zod 3.25.53](https://zod.dev/)** - TypeScript-first schema validation with static type inference
@@ -173,6 +179,66 @@ pnpm run check        # Run both linting and type checking
 pnpm run postinstall  # Prepare Nuxt (auto-run after install)
 ```
 
+## 🔐 Authentication (Better Auth)
+
+This template ships with Better Auth fully wired-up for email/password, email verification, password reset, and Google OAuth, with SSR-friendly session handling.
+
+### Features
+
+- Email/password auth with email verification and password reset
+- Social login: Google
+- SSR-safe session refresh and cookie forwarding
+- Route protection via middleware: `auth`, `admin`, optional `email-verified`
+
+### Flows & Usage
+
+- Login/Signup/Logout: handled via `authClient` in UI forms and `useAuth()` composable
+- Authenticated routes: add page meta
+
+```ts
+// pages/any-protected-page.vue
+definePageMeta({ middleware: "auth" });
+
+// Admin-only route
+definePageMeta({ middleware: "admin" });
+
+// Require verified email (optional)
+definePageMeta({ middleware: ["auth", "email-verified"] });
+```
+
+- Session refresh (SSR-friendly): `useAuth().refresh()` forwards cookies on server
+
+```ts
+// useAuth() excerpt showing SSR cookie forwarding for session
+// Server: forwards incoming Cookie header to /api/auth/session
+// Client: uses credentials: 'include'
+```
+
+### API Routes
+
+- Better Auth handler: `server/api/auth/[...all].ts` → proxies all Better Auth endpoints under `/api/auth/*`
+- Session endpoint: `server/api/auth/session.get.ts` → returns `{ user, success }`, augments `user.admin`
+
+### Environment Variables
+
+Set these in `.env` (see `.env.example` for placeholders):
+
+- Core: `NODE_ENV`, `DATABASE_URL`
+- Better Auth: `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`
+- OAuth (Google): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+- SMTP (Ethereal/dev): `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM_NAME`, `SMTP_FROM_EMAIL`
+
+Production guidance:
+
+- Set `BETTER_AUTH_URL` to your canonical HTTPS domain
+- Review secure cookie options in Better Auth config before deploying
+
+### Local Testing
+
+- Seed users: `pnpm db:seed:users`
+- Test credentials: see `scripts/docs/test-credentials.md`
+- Admin: `admin@example.com` / `admin123`
+
 ## 🚀 Production
 
 Build the application for production:
@@ -192,6 +258,7 @@ pnpm run preview
 ## 📚 Documentation Links
 
 - **[Nuxt 3 Documentation](https://nuxt.com/docs)** - Learn about Nuxt features and API
+- **[Better Auth Documentation](https://github.com/better-auth/better-auth#readme)** - Authentication library used in this template
 - **[Drizzle ORM Documentation](https://orm.drizzle.team/)** - TypeScript ORM for SQL databases
 - **[Drizzle Kit Documentation](https://orm.drizzle.team/kit-docs/overview)** - Migration and schema management tools
 - **[Supabase Documentation](https://supabase.com/docs)** - Open source Firebase alternative

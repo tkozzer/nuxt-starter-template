@@ -3,6 +3,8 @@ import type { User } from "@schemas";
 
 import { useLocalStorage } from "@vueuse/core";
 
+import { createClientLogger } from "~/lib/logger/client";
+
 type ApiResponse = {
   success: boolean;
   data: User[];
@@ -30,6 +32,8 @@ function formatDate(date: Date | string) {
 }
 
 // Seed users function (you can remove this if you don't want the button)
+const log = createClientLogger("page:users");
+
 async function seedUsers() {
   try {
     // This would call your seeding endpoint if you create one
@@ -37,7 +41,7 @@ async function seedUsers() {
     await refresh();
   }
   catch (err) {
-    console.error("Failed to seed users:", err);
+    log("failed to seed users: %o", err);
     // You could show a toast notification here
   }
 }

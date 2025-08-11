@@ -8,8 +8,10 @@ useHead({
 });
 
 import { useToasts } from "~/composables/useToasts";
+import { createClientLogger } from "~/lib/logger/client";
 
 const { info, success, warning, error, promise } = useToasts();
+const demoLog = createClientLogger("app:demo");
 
 function showInfo() {
   info("Heads up!", "Informational toast");
@@ -40,6 +42,10 @@ async function showPromise() {
 
 function toastInDialog() {
   info("Dialog toast", "Toast triggered from inside dialog");
+}
+
+function showDebugLog() {
+  demoLog("debug demo clicked at %s", new Date().toISOString());
 }
 </script>
 
@@ -76,6 +82,9 @@ function toastInDialog() {
         </Button>
         <Button variant="default" @click="showPromise">
           Promise
+        </Button>
+        <Button variant="outline" @click="showDebugLog">
+          Debug log
         </Button>
 
         <!-- Dialog test: open dialog and trigger a toast inside -->

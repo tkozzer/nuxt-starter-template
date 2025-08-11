@@ -2,6 +2,7 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 
+import { createClientLogger } from "~/lib/logger/client";
 import { authSchemas } from "~/lib/schemas/auth";
 
 type AuthSignupFormProps = {
@@ -43,6 +44,8 @@ const form = useForm({
 const isLoading = ref(false);
 
 // Handle form submission
+const log = createClientLogger("auth:signup-form");
+
 const onSubmit = form.handleSubmit(async (values) => {
   isLoading.value = true;
 
@@ -57,7 +60,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     // Error handling is managed by the useAuth composable
   }
   catch (error) {
-    console.error("Signup error:", error);
+    log("signup error: %o", error);
   }
   finally {
     isLoading.value = false;

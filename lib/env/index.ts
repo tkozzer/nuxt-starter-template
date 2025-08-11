@@ -6,6 +6,29 @@ const EnvSchema = z.object({
   NODE_ENV: z.string(),
   DATABASE_URL: z.string(),
 
+  // Logging
+  LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error", "fatal"]).default("info"),
+  LOG_PRETTY: z
+    .string()
+    .transform(value => value === "true")
+    .default("false"),
+  LOG_REQUESTS: z
+    .string()
+    .transform(value => value === "true")
+    .default("true"),
+  LOG_REDACT: z
+    .string()
+    .transform((value) => {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [] as string[];
+      }
+      catch {
+        return [] as string[];
+      }
+    })
+    .default("[]"),
+
   // Better Auth Configuration
   BETTER_AUTH_SECRET: z.string().optional(),
   BETTER_AUTH_URL: z.string().optional(),
@@ -16,6 +39,7 @@ const EnvSchema = z.object({
   // Nuxt Public Variables (client-side accessible)
   SUPABASE_URL: z.string().optional(), // Supabase project URL
   SUPABASE_ANON_KEY: z.string().optional(), // Supabase anonymous key
+  NUXT_PUBLIC_DEBUG: z.string().default(""),
 
   // Nuxt Private Variables (server-side only)
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(), // Supabase service role key (server-side only)

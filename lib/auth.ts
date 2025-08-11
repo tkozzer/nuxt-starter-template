@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
+import { getServerLogger } from "~/lib/logger/server";
 import { sendMail } from "~/server/utils/mailer";
 
 import db from "./db";
@@ -12,7 +13,9 @@ const betterAuthUrl = env.BETTER_AUTH_URL || "http://localhost:3000";
 
 // Debug logging (development only)
 if (env.NODE_ENV !== "production") {
-  console.warn("Better Auth Config:", {
+  const logger = getServerLogger();
+  logger.debug({
+    msg: "better-auth:config",
     hasSecret: !!betterAuthSecret,
     secretLength: betterAuthSecret.length,
     baseURL: betterAuthUrl,

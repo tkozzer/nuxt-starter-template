@@ -197,6 +197,41 @@ info("Heads up!", "Informational toast");
 
 Demo buttons are available on the home page (`pages/index.vue`).
 
+## 🪵 Logging (Pino server + debug client)
+
+Server (Pino):
+
+```ts
+// Inside a server handler
+export default defineEventHandler((event) => {
+  event.context.logger.info({ msg: "users:list" });
+});
+```
+
+Client (debug):
+
+```ts
+import { createClientLogger } from "~/lib/logger/client";
+const log = createClientLogger("feature:example");
+log("clicked with payload %o", payload);
+```
+
+Environment:
+
+```env
+# .env
+LOG_LEVEL=info
+LOG_PRETTY=true        # pretty logs in dev; set false in prod
+LOG_REQUESTS=true      # request start/finish logs
+LOG_REDACT=["headers.authorization","headers.cookie","body.password","body.token"]
+NUXT_PUBLIC_DEBUG=app:*,feature:*
+```
+
+Notes:
+
+- Request correlation via `x-request-id` (echoed in response headers)
+- Toggle client logs at runtime: `localStorage.debug = 'app:*,feature:*'; location.reload()`
+
 ## 🔐 Authentication (Better Auth)
 
 This template ships with Better Auth fully wired-up for email/password, email verification, password reset, and Google OAuth, with SSR-friendly session handling.

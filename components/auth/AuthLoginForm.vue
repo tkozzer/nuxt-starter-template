@@ -2,6 +2,7 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 
+import { createClientLogger } from "~/lib/logger/client";
 import { authSchemas } from "~/lib/schemas/auth";
 
 type AuthLoginFormProps = {
@@ -36,6 +37,8 @@ const form = useForm({
 const isLoading = ref(false);
 
 // Handle form submission
+const log = createClientLogger("auth:login-form");
+
 const onSubmit = form.handleSubmit(async (values) => {
   isLoading.value = true;
 
@@ -48,7 +51,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     // Error handling is managed by the useAuth composable
   }
   catch (error) {
-    console.error("Login error:", error);
+    log("login error: %o", error);
   }
   finally {
     isLoading.value = false;

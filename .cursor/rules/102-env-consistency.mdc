@@ -1,0 +1,64 @@
+---
+description: Ensure .env, .env.example, and lib/env/index.ts stay in sync. .env and .env.example share the same structure and comments; env/index.ts defines the full set in Zod.
+globs:
+  - ".env"
+  - ".env.example"
+  - "lib/env/index.ts"
+alwaysApply: true
+---
+
+## Environment Variable Consistency
+
+**Goal**: Keep environment variables consistent across `.env`, `.env.example`, and `lib/env/index.ts`.
+
+- **Canonical source**: `.env.example` (contains the full list with detailed comments and sections)
+- **Local file**: `.env` must mirror `.env.example` structure/comments; only values differ
+- **Runtime schema**: `lib/env/index.ts` must include all variables (names exactly match) in the Zod schema
+
+### Rules
+
+1. When introducing, renaming, or removing an env var:
+   - Update `.env.example` first with a commented section, a placeholder value, and clear guidance
+   - Update `lib/env/index.ts` Zod schema to include the variable (mark required/optional appropriately)
+   - Sync `.env` so it mirrors `.env.example` (copy the comments/ordering; fill actual values)
+2. `.env` and `.env.example` should have the same sections, ordering, and comments. Only the values differ.
+3. Ensure `lib/env/index.ts` includes all variables present in `.env.example` (and no typos/mismatches).
+4. Never commit secrets. Keep `.env` in `.gitignore`. Use safe placeholders in `.env.example`.
+
+### Assistant Procedure (when asked to sync or when touching env vars)
+
+1. Extract keys for comparison:
+   - From `.env.example`:
+     ```bash
+     grep -E '^[A-Z][A-Z0-9_]*=' .env.example | cut -d '=' -f1 | sort -u > /tmp/keys.example
+     ```
+   - From `.env`:
+     ```bash
+     grep -E '^[A-Z][A-Z0-9_]*=' .env | cut -d '=' -f1 | sort -u > /tmp/keys.env
+     ```
+   - From `lib/env/index.ts` (Zod schema fields):
+     ```bash
+     grep -E '^[[:space:]]+[A-Z][A-Z0-9_]+:' lib/env/index.ts | sed -E 's/^[[:space:]]+([A-Z0-9_]+):.*/\1/' | sort -u > /tmp/keys.schema
+     ```
+2. Compare sets to find gaps:
+   ```bash
+   echo "Missing in schema:" && comm -13 /tmp/keys.schema /tmp/keys.example
+   echo "Missing in example:" && comm -23 /tmp/keys.schema /tmp/keys.example
+   echo "Diff between .env and example:" && comm -3 /tmp/keys.env /tmp/keys.example
+   ```
+3. Fixes to apply:
+   - Add missing variables to `.env.example` with comments and placeholders
+   - Add matching fields to `lib/env/index.ts` Zod schema (use optional/required as needed)
+   - Align `.env` to match `.env.example` structure/comments. Backup first if needed:
+     ```bash
+     cp .env .env.bak && cp .env.example .env
+     # then replace placeholders with actual values
+     ```
+4. Validate: Re-run the comparison; ensure zero diffs aside from values.
+
+### Notes
+
+- Common variables to include (example; adjust to project needs): `NODE_ENV`, `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `SUPABASE_DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
+- Prefer `z.string()` (or `z.enum([...])` for constrained vars like `NODE_ENV`) in `lib/env/index.ts` and mark optional only when truly optional.
+- Preserve the detailed commenting style in `.env.example` and replicate it in `.env`.
+

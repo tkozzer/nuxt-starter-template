@@ -4,11 +4,15 @@ Use this checklist to finish the Better Auth integration and polish the develope
 
 - [ ] Email verification flow
 
+  - [x] Configure SMTP for development (Nodemailer + Ethereal)
+    - Credentials stored locally in `.env` (do not commit); placeholders added to `.env.example`
+    - Reference: Ethereal docs (`https://ethereal.email/`, `https://ethereal.email/faq`)
+  - [x] Add `.env.example` placeholders for SMTP (Ethereal) keys
+  - [x] Install `nodemailer` dependency
   - [ ] Issue verification tokens using `verification` table (server)
-  - [ ] Send verification email (choose provider, e.g., Resend/Nodemailer)
+  - [ ] Send verification email (Nodemailer via Ethereal)
   - [ ] Add verification callback route (marks `user.emailVerified = true`)
   - [ ] UI prompts for unverified users and option to resend
-  - [ ] Add `.env.example` placeholders for email provider keys
 
 - [ ] Password reset flow
 

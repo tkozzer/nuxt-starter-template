@@ -23,6 +23,15 @@ const EnvSchema = z.object({
   // OAuth Providers (Google)
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
+
+  // SMTP / Email (Ethereal for development)
+  SMTP_HOST: z.string(),
+  SMTP_PORT: z.string(),
+  SMTP_SECURE: z.string(), // "true" | "false"
+  SMTP_USER: z.string(),
+  SMTP_PASSWORD: z.string(),
+  SMTP_FROM_NAME: z.string(),
+  SMTP_FROM_EMAIL: z.string(),
 });
 
 export type EnvSchema = z.infer<typeof EnvSchema>;

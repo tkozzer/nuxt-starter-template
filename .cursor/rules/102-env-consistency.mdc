@@ -62,3 +62,15 @@ alwaysApply: true
 - Prefer `z.string()` (or `z.enum([...])` for constrained vars like `NODE_ENV`) in `lib/env/index.ts` and mark optional only when truly optional.
 - Preserve the detailed commenting style in `.env.example` and replicate it in `.env`.
 
+### Helper Script (dupes + consistency)
+
+- We provide an automated checker at `scripts/env/check-env.ts` that detects duplicate keys and ensures `.env`, `.env.example`, and `lib/env/index.ts` stay in sync.
+- Run it directly or via package scripts in `package.json`:
+
+```bash
+pnpm run env:check   # runs scripts/env/check-env.ts
+pnpm run check       # includes env:check along with lint + typecheck
+```
+
+- The script exits non‑zero on problems and prints exactly what’s missing/duplicated; on success it prints: “Environment files are consistent with schema. No duplicates detected.”
+

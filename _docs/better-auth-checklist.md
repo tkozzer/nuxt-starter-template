@@ -2,7 +2,7 @@
 
 Use this checklist to finish the Better Auth integration and polish the developer experience.
 
-- [ ] Email verification flow
+- [x] Email verification flow
 
   - [x] Configure SMTP for development (Nodemailer + Ethereal)
     - Credentials stored locally in `.env` (do not commit); placeholders added to `.env.example`
@@ -16,7 +16,7 @@ Use this checklist to finish the Better Auth integration and polish the develope
   - [x] Add verification callback route (marks `user.emailVerified = true`)
   - [x] UI prompt and action to resend verification email for unverified users (Dashboard)
 
-- [ ] Password reset flow
+- [x] Password reset flow
 
   - [x] Add `pages/auth/forgot-password.vue` (request reset)
   - [x] Add `pages/auth/reset.vue` (query token); remove path token page (use built-in redirect/links)
@@ -30,7 +30,6 @@ Use this checklist to finish the Better Auth integration and polish the develope
   - [x] Update `.env.example` with provider keys
   - [x] Add keys to `lib/env/index.ts`
   - [x] Sync `.env` placeholders for Google keys
-  - [ ] Add notes in `README.md`
 
 - [x] General auth middleware
 
@@ -43,18 +42,17 @@ Use this checklist to finish the Better Auth integration and polish the develope
 
   - [x] Update `pages/index.vue` to add a `ShadowCard` for Better Auth
     - Implemented with `shadow-color="amber-500"`, icon `lucide:key-round`, short blurb
-  - [ ] Add quick links to Admin demo (`/users`) when `user.admin === true`
 
-- [ ] README updates (document Better Auth)
+- [x] README updates (document Better Auth)
 
-  - [ ] Add section covering: features, flows (login/signup/logout, session, admin), SSR cookie forwarding, and routes
-  - [ ] Add environment variables and production guidance (`BETTER_AUTH_URL`, secrets)
-  - [ ] Add local testing steps and seed instructions; reference `scripts/docs/test-credentials.md`
+  - [x] Add section covering: features, flows (login/signup/logout, session, admin), SSR cookie forwarding, and routes
+  - [x] Add environment variables and production guidance (`BETTER_AUTH_URL`, secrets)
+  - [x] Add local testing steps and seed instructions; reference `scripts/docs/test-credentials.md`
 
-- [ ] Environment variable consistency
+- [x] Environment variable consistency
 
-  - [ ] Ensure `.env.example`, `.env`, and `lib/env/index.ts` include all Better Auth and provider keys (names match exactly)
-  - [ ] Add production notes (set `BETTER_AUTH_URL=https://your-domain`)
+  - [x] Ensure `.env.example`, `.env`, and `lib/env/index.ts` include all Better Auth and provider keys (names match exactly)
+  - [x] Add production notes (set `BETTER_AUTH_URL=https://your-domain`)
 
 - [ ] Production hardening
 

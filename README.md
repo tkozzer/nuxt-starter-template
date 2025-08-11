@@ -258,8 +258,7 @@ pnpm run preview
 ## 📚 Documentation Links
 
 - **[Nuxt 3 Documentation](https://nuxt.com/docs)** - Learn about Nuxt features and API
-- **[Better Auth Documentation](https://github.com/better-auth/better-auth#readme)** - Authentication library used in this template
-- **[Better Auth on npm](https://www.npmjs.com/package/better-auth)** - Package page and release info
+- **[Better Auth Documentation](https://www.better-auth.com/docs/introduction)** - Authentication library used in this template
 - **[Drizzle ORM Documentation](https://orm.drizzle.team/)** - TypeScript ORM for SQL databases
 - **[Drizzle Kit Documentation](https://orm.drizzle.team/kit-docs/overview)** - Migration and schema management tools
 - **[Supabase Documentation](https://supabase.com/docs)** - Open source Firebase alternative
@@ -270,9 +269,9 @@ pnpm run preview
 - **[Pinia Documentation](https://pinia.vuejs.org/)** - State management patterns and best practices
 - **[Zod Documentation](https://zod.dev/)** - Schema validation and type inference
 - **[Deployment Guide](https://nuxt.com/docs/getting-started/deployment)** - Deploy your Nuxt application
- - **[Nodemailer](https://nodemailer.com/about/)** - Email sending library used for dev SMTP
- - **[Ethereal Email](https://ethereal.email/)** - Fake SMTP service for testing emails
- - **[Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2)** - OAuth flow used for Google sign-in
+- **[Nodemailer](https://nodemailer.com/about/)** - Email sending library used for dev SMTP
+- **[Ethereal Email](https://ethereal.email/)** - Fake SMTP service for testing emails
+- **[Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2)** - OAuth flow used for Google sign-in
 
 ## 🎯 Getting Started
 

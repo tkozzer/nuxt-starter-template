@@ -133,9 +133,16 @@ function showDebugLog() {
           variant="outline"
           size="lg"
           class="text-lg px-8"
+          as-child
         >
-          <Icon name="lucide:github" class="mr-2 h-5 w-5" />
-          View on GitHub
+          <a
+            href="https://github.com/tkozzer/nuxt-starter-template/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="lucide:github" class="mr-2 h-5 w-5" />
+            View on GitHub
+          </a>
         </Button>
       </div>
     </div>
@@ -326,13 +333,32 @@ function showDebugLog() {
           </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg">
-            <Icon name="lucide:download" class="mr-2 h-5 w-5" />
-            Clone Template
+          <Button
+            size="lg"
+            as-child
+          >
+            <a
+              href="https://github.com/tkozzer/nuxt-starter-template/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name="lucide:download" class="mr-2 h-5 w-5" />
+              Clone Template
+            </a>
           </Button>
-          <Button variant="outline" size="lg">
-            <Icon name="lucide:book-open" class="mr-2 h-5 w-5" />
-            Read Documentation
+          <Button
+            variant="outline"
+            size="lg"
+            as-child
+          >
+            <a
+              href="https://github.com/tkozzer/nuxt-starter-template/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name="lucide:book-open" class="mr-2 h-5 w-5" />
+              Read Documentation
+            </a>
           </Button>
         </div>
       </ShadowCard>

@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Requires well-structured, multi-line git commit messages summarizing all staged changes with semantic prefixes and 
 descriptive body.
 globs:

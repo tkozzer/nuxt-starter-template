@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: true
----
----
 description: Shadcn-Vue Component Library Integration Rules for Nuxt - complete component list and installation instructions
 globs: ["**/components/ui/**/*.vue", "**/components.json", "**/tailwind.config.*"]
 alwaysApply: true

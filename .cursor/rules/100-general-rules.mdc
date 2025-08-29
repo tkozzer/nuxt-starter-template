@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: true
----
----
 description: General rules for Nuxt UI Template - pnpm usage, tech stack, and development conventions
 globs: ["**/*.ts", "**/*.vue", "**/package.json", "**/pnpm-lock.yaml"]
 alwaysApply: true

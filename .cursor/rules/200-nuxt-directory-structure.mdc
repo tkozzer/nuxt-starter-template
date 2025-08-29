@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: true
----
----
 description: Nuxt 3 directory structure and organization conventions based on official documentation
 globs: ["**/*.vue", "**/nuxt.config.ts", "**/app.config.ts"]
 alwaysApply: true
